@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BitSwizzler.io — Indie Game Studio</title>
+  <meta name="description" content="BitSwizzler is an independent game studio and publisher. Play our games on Steam and Itch.io.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module">
+    import 'https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js';
+    // Draco-compressed GLBs need a decoder; serve it from the same CDN as model-viewer itself.
+    customElements.get('model-viewer').dracoDecoderLocation = 'https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/libs/draco/gltf/';
+  </script>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header" id="top">
+    <a class="wordmark" href="#top">Bit<span>Swizzler</span>.io</a>
+    <nav class="nav">
+      <a href="#games" class="active">Games</a>
+      <a href="showcase.html">Showcase</a>
+    </nav>
+    <div class="store-links">
+      <a class="btn btn-steam" href="https://store.steampowered.com/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.7 2 2.4 6.1 2 11.3l5.4 2.2c.5-.3 1-.5 1.6-.5h.2l2.4-3.5v-.1c0-2.1 1.7-3.8 3.8-3.8s3.8 1.7 3.8 3.8-1.7 3.8-3.8 3.8h-.1l-3.4 2.4v.2c0 1.6-1.3 2.9-2.9 2.9-1.4 0-2.6-1-2.8-2.4L2.3 14.7C3.5 19 7.4 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm-5.7 15.3l-1.2-.5c.2.5.6.9 1.1 1.1 1.1.5 2.4 0 2.9-1.1.2-.5.2-1.1 0-1.7-.2-.5-.6-1-1.2-1.2-.5-.2-1.1-.2-1.6 0l1.3.5c.8.3 1.2 1.3.9 2.1-.4.8-1.4 1.2-2.2.8zm9.1-5.4c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5 2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5zm0-4.4c-1 0-1.9.8-1.9 1.9s.8 1.9 1.9 1.9 1.9-.8 1.9-1.9-.9-1.9-1.9-1.9z"/></svg>
+        Steam
+      </a>
+      <a class="btn btn-itch" href="https://itch.io/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.1 3.4C2.2 4 .4 5.9.3 6.4v1.5c0 1.9 1.8 3.6 3.4 3.6 1.9 0 3.5-1.6 3.5-3.5 0 1.9 1.5 3.5 3.4 3.5s3.4-1.6 3.4-3.5c0 1.9 1.6 3.5 3.5 3.5s3.4-1.6 3.4-3.5c0 1.9 1.6 3.5 3.5 3.5 1.6 0 3.4-1.7 3.4-3.6V6.4c-.1-.5-1.9-2.4-2.8-3C18.3 3.3 15.4 3.3 12 3.3s-6.3.1-9 .1zm5.9 8.8c-.4.6-.9 1.1-1.5 1.4-.6.4-1.3.5-2 .5-.2 0-.4 0-.6-.1v3.9c0 .9 0 1.6.1 2.1.2 1.2.5 1.3 1.7 1.4 1.9.1 3.9.2 5.3.2s3.4-.1 5.3-.2c1.2-.1 1.5-.2 1.7-1.4.1-.5.1-1.2.1-2.1v-3.9c-.2.1-.4.1-.6.1-.7 0-1.4-.2-2-.5-.6-.3-1.1-.8-1.5-1.4-.4.6-.9 1.1-1.5 1.4-.6.4-1.3.5-2 .5s-1.4-.2-2-.5c-.6-.3-1.1-.8-1.5-1.4zm3 2.3c.6 0 1.1.2 1.5.5.4.3.8.7 1 1.2.4.9.8 1.8 1.2 2.7l.2.6h-1.7l-.2-.6h-4l-.2.6H8.1l.2-.6c.4-.9.8-1.8 1.2-2.7.2-.5.6-.9 1-1.2.4-.3.9-.5 1.5-.5zm0 1.5c-.2 0-.4.1-.5.2-.2.1-.3.3-.4.5l-.6 1.4h3l-.6-1.4c-.1-.2-.2-.4-.4-.5-.1-.1-.3-.2-.5-.2z"/></svg>
+        Itch.io
+      </a>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+  </header>
+
+  <!-- ===== HERO CAROUSEL ===== -->
+  <section class="hero" id="hero">
+    <div class="carousel" data-interval="5000">
+      <div class="slide is-active" style="background-image:url('assets/images/image_01_web.webp')"></div>
+      <div class="slide" style="background-image:url('assets/images/image_02_web.webp')"></div>
+      <div class="slide" style="background-image:url('assets/images/image_03_web.webp')"></div>
+      <div class="slide" style="background-image:url('assets/images/image_04_web.webp')"></div>
+      <div class="slide" style="background-image:url('assets/images/image_05_web.webp')"></div>
+      <div class="slide" style="background-image:url('assets/images/image_06_web.webp')"></div>
+      <div class="slide" style="background-image:url('assets/images/image_07_web.webp')"></div>
+      <div class="slide" style="background-image:url('assets/images/image_08_web.webp')"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="eyebrow">Independent Game Studio &amp; Publisher</p>
+      <h1 class="hero-title">Bit<span>Swizzler</span>.io</h1>
+      <p class="hero-sub">Game Designer<span class="dot" aria-hidden="true"></span>Artist<span class="dot" aria-hidden="true"></span>Educator</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#games">See Our Games</a>
+        <a class="btn btn-ghost" href="https://store.steampowered.com/" target="_blank" rel="noopener">Wishlist on Steam</a>
+      </div>
+    </div>
+    <div class="carousel-dots" role="tablist" aria-label="Slides"></div>
+    <button class="carousel-arrow prev" aria-label="Previous slide">&#10094;</button>
+    <button class="carousel-arrow next" aria-label="Next slide">&#10095;</button>
+    <div class="scroll-hint" aria-hidden="true"><span></span></div>
+  </section>
+
+  <!-- ===== VIDEO GAME SECTIONS ===== -->
+  <div id="games" class="anchor-offset"></div>
+
+  <section class="game-section angled tone-a" data-dir="right">
+    <div class="game-inner">
+      <div class="media reveal from-left">
+        <div class="video-frame">
+          <video muted loop playsinline preload="metadata" poster="assets/images/image_01_web.webp">
+            <source src="assets/videos/game1.mp4" type="video/mp4">
+          </video>
+          <button class="sound-toggle" aria-label="Toggle sound">&#128264;</button>
+        </div>
+      </div>
+      <div class="copy reveal from-right">
+        <span class="section-num">01</span>
+        <h2>Chalkboard Silicon</h2>
+        <p class="tagline">Silicon to a full retro 8-bit gaming system!</p>
+        <p>Chalkboard Silicon provides an entire suite of tools to develop from doped silicon to gates to systems to a complete custom 8-bit gaming console that uses real world retro hardware and 6502 assembly and you can even go on to use the very well established cc65 compiler and develop your very own game for such systems as the Atari, NES, or my favorite, the TurboGrafx 16!</p>
+        <div class="tags"><span>Logic</span><span>Puzzle</span><span>Simulation</span></div>
+        <div class="links">
+          <a class="btn btn-steam soon" data-soon="Q2 2027" aria-disabled="true" tabindex="-1">Steam</a>
+          <a class="btn btn-itch soon" data-soon="TBD" aria-disabled="true" tabindex="-1">Itch.io</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="game-section angled tone-b" data-dir="left">
+    <div class="game-inner">
+      <div class="media reveal from-left">
+        <div class="video-frame">
+          <video muted loop playsinline preload="metadata" poster="assets/images/image_02_web.webp">
+            <source src="assets/videos/game2.mp4" type="video/mp4">
+          </video>
+          <button class="sound-toggle" aria-label="Toggle sound">&#128264;</button>
+        </div>
+      </div>
+      <div class="copy reveal from-right">
+        <span class="section-num">02</span>
+        <h2>Emberswarm</h2>
+        <p class="tagline">Survivors-like with a floor that remembers</p>
+        <p>Emberswarm demonstrate the valid use of LuaJIT FFI and other optimizations in a survivors-like game where the ashes and embers of the dead collect on the floor underneath you and slow your movement.</p>
+        <div class="tags"><span>Survival</span><span>Survivors-like</span><span>Pixel Art</span></div>
+        <div class="links">
+          <a class="btn btn-steam soon" data-soon="Not on Steam" aria-disabled="true" tabindex="-1">Steam</a>
+          <a class="btn btn-itch" href="https://bitswizzler.itch.io/emberswarm" target="_blank" rel="noopener">Itch.io</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="game-section angled tone-a" data-dir="right">
+    <div class="game-inner">
+      <div class="media reveal from-left">
+        <div class="video-frame">
+          <video muted loop playsinline preload="metadata" poster="assets/images/image_03_web.webp">
+            <source src="assets/videos/game3.mp4" type="video/mp4">
+          </video>
+          <button class="sound-toggle" aria-label="Toggle sound">&#128264;</button>
+        </div>
+      </div>
+      <div class="copy reveal from-right">
+        <span class="section-num">03</span>
+        <h2>Platonic Neon</h2>
+        <p class="tagline">Intense shmup bullet storm</p>
+        <p>Explore a geometric universe of platonic solids in this fast-paced bullet hell shoot 'em up.</p>
+        <div class="tags"><span>Action</span><span>Shoot 'Em Up</span><span>Retro</span></div>
+        <div class="links">
+          <a class="btn btn-steam soon" data-soon="In Development" aria-disabled="true" tabindex="-1">Steam</a>
+          <a class="btn btn-itch soon" data-soon="In Development" aria-disabled="true" tabindex="-1">Itch.io</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="game-section angled tone-b" data-dir="left">
+    <div class="game-inner">
+      <div class="media reveal from-left">
+        <div class="video-frame">
+          <video muted loop playsinline preload="metadata" poster="assets/images/image_04_web.webp">
+            <source src="assets/videos/game4.mp4" type="video/mp4">
+          </video>
+          <button class="sound-toggle" aria-label="Toggle sound">&#128264;</button>
+        </div>
+      </div>
+      <div class="copy reveal from-right">
+        <span class="section-num">04</span>
+        <h2>Bologna</h2>
+        <p class="tagline">Rogue-like with sixteen randomly generated dungeons!</p>
+        <p>Explore sixteen randomly generated dungeons with a variety of biomes and enemies to slay. Bash zombies. Slay spiders. Collect treasure. Shop at the merchant. Improve your gear. Find the bologna.</p>
+        <div class="tags"><span>Rogue-like</span><span>Dungeon Crawler</span><span>Multiplayer</span></div>
+        <div class="links">
+          <a class="btn btn-steam soon" data-soon="In Development" aria-disabled="true" tabindex="-1">Steam</a>
+          <a class="btn btn-itch soon" data-soon="TBA" aria-disabled="true" tabindex="-1">Itch.io</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="game-section angled tone-a" data-dir="right">
+    <div class="game-inner">
+      <div class="media reveal from-left">
+        <div class="video-frame">
+          <video muted loop playsinline preload="metadata" poster="assets/images/image_05_web.webp">
+            <source src="assets/videos/game5.mp4" type="video/mp4">
+          </video>
+          <button class="sound-toggle" aria-label="Toggle sound">&#128264;</button>
+        </div>
+      </div>
+      <div class="copy reveal from-right">
+        <span class="section-num">05</span>
+        <h2>Untitled</h2>
+        <p class="tagline">Multiplayer survival horror</p>
+        <p>Aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.</p>
+        <div class="tags"><span>Horror</span><span>Narrative</span><span>Sci-Fi</span></div>
+        <div class="links">
+          <a class="btn btn-steam soon" data-soon="In Development" aria-disabled="true" tabindex="-1">Steam</a>
+          <a class="btn btn-itch soon" data-soon="In Development" aria-disabled="true" tabindex="-1">Itch.io</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SHOWCASE TEASER (full showcase lives on showcase.html) ===== -->
+  <section class="divider-band" aria-hidden="true">
+    <div class="marquee">
+      <div class="marquee-track">
+        <span>Showcase</span><span>&#9670;</span><span>3D</span><span>&#9670;</span><span>Drawings</span><span>&#9670;</span><span>Digital</span><span>&#9670;</span>
+        <span>Showcase</span><span>&#9670;</span><span>3D</span><span>&#9670;</span><span>Drawings</span><span>&#9670;</span><span>Digital</span><span>&#9670;</span>
+        <span>Showcase</span><span>&#9670;</span><span>3D</span><span>&#9670;</span><span>Drawings</span><span>&#9670;</span><span>Digital</span><span>&#9670;</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="model-section teaser angled tone-b" data-dir="left" id="showcase">
+    <div class="game-inner flip">
+      <div class="copy reveal from-left">
+        <span class="section-num">Showcase</span>
+        <h2>Beyond the Games</h2>
+        <p class="tagline">3D models, charcoal &amp; pencil drawings, digital art.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua &mdash; a peek at the craft behind the games. Drag Joule around, then head over to the showcase for the rest.</p>
+        <div class="cat-links">
+          <a href="showcase.html#3d">3D</a><a href="showcase.html#drawings">Drawings</a><a href="showcase.html#digital">Digital</a>
+        </div>
+        <div class="links"><a class="btn btn-primary" href="showcase.html">See the full showcase &rarr;</a></div>
+      </div>
+      <div class="media reveal from-right">
+        <div class="model-frame">
+          <model-viewer src="assets/models/Joule_web.glb" alt="Joule 3D model"
+            camera-controls auto-rotate auto-rotate-delay="800" rotation-per-second="20deg"
+            shadow-intensity="1.2" shadow-softness="0.8" exposure="1.1" tone-mapping="neutral"
+            environment-image="neutral" touch-action="pan-y" loading="lazy" reveal="auto"
+            interaction-prompt="auto">
+            <div class="model-placeholder" slot="poster">
+              <div class="cube"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              <p>Loading model&hellip;</p>
+            </div>
+            <div class="model-progress" slot="progress-bar"><div class="bar"></div></div>
+            <button class="wire-toggle" type="button" aria-pressed="false" title="Toggle wireframe">Wire</button>
+          </model-viewer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a class="wordmark small" href="#top">Bit<span>Swizzler</span>.io</a>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Also reachable at <a href="https://bitswizzler.com">bitswizzler.com</a>.</p>
+      <div class="store-links">
+        <a class="btn btn-steam" href="https://store.steampowered.com/" target="_blank" rel="noopener">Steam</a>
+        <a class="btn btn-itch" href="https://itch.io/" target="_blank" rel="noopener">Itch.io</a>
+      </div>
+      <p class="lab-link"><span>Lab:</span> <a href="foley/" title="Foley Fun — a procedural sound-effect lab">Foley Fun</a> <span class="sep">&middot;</span> <a href="collisionlab/" title="CollisionLab — SAT / GJK / MPR and broadphase, interactive">CollisionLab</a> <span class="sep">&middot;</span> <a href="https://github.com/BitSwizzlerio" target="_blank" rel="noopener" title="BitSwizzler on GitHub">GitHub</a></p>
+      <p class="copyright">&copy; <span id="year"></span> BitSwizzler. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- 3D models: glTF/GLB in assets/models/, rendered by <model-viewer> (loaded in <head>). Full set on showcase.html -->
+  <script src="js/main.js"></script>
+</body>
+</html>

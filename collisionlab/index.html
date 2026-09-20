@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>CollisionLab — BitSwizzler Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --bg: #121214; --bg2: #18181c; --line: #2f2f37; --text: #e9e9ee; --muted: #a2a2ad; --yellow: #FFD400; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; min-height: 100%; }
+    .bar {
+      display: flex; align-items: center; gap: 1rem; padding: .6rem 1.25rem;
+      background: rgba(18,18,20,.95); border-bottom: 1px solid rgba(255,212,0,.15);
+    }
+    .home { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 1.4rem; letter-spacing: .06em; color: var(--yellow); text-decoration: none; white-space: nowrap; text-shadow: 0 0 12px rgba(255,212,0,.3); }
+    .home span { color: #fff; }
+    .home small { font-family: 'Inter', sans-serif; font-size: .65rem; letter-spacing: .15em; color: var(--muted); margin-right: .5rem; vertical-align: middle; }
+    .title { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 1.4rem; letter-spacing: .06em; padding-left: 1rem; border-left: 1px solid var(--line); }
+    .title em { font-style: normal; font-family: 'Inter', sans-serif; font-size: .75rem; letter-spacing: .05em; color: var(--muted); margin-left: .6rem; }
+    .spacer { flex: 1; }
+    .bar button, .bar a.btn {
+      font: 600 .75rem/1 'Inter', sans-serif; letter-spacing: .08em; text-transform: uppercase; cursor: pointer;
+      color: var(--text); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: .45rem .8rem; text-decoration: none;
+    }
+    .bar button:hover, .bar a.btn:hover { border-color: var(--yellow); color: var(--yellow); }
+
+    .stage { display: grid; place-items: center; padding: 1.25rem; }
+    .frame { position: relative; width: min(1280px, 100%); aspect-ratio: 1280 / 780; background: #000; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(255,212,0,.08); }
+    /* the canvas must have no border/padding (mouse coords); CSS scaling of the whole canvas is fine */
+    #canvas { display: block; width: 100%; height: 100%; visibility: hidden; outline: none; }
+    .frame:fullscreen, .frame:-webkit-full-screen { display: grid; place-items: center; background: #000; border: 0; border-radius: 0; box-shadow: none; }
+    .loading { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 1rem; color: var(--muted); font-size: .9rem; background: radial-gradient(circle at 50% 40%, #2b2b33, #141417 70%); }
+    .loading .ring { width: 48px; height: 48px; border-radius: 50%; border: 3px solid rgba(255,212,0,.2); border-top-color: var(--yellow); animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading .pct { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 1.6rem; letter-spacing: .1em; color: var(--yellow); }
+
+    .keys { width: min(1280px, 100%); margin: 0 auto; padding: 0 1.25rem 2rem; color: var(--muted); font-size: .85rem; display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; }
+    .keys kbd { font: 600 .75rem/1 'Inter', sans-serif; color: var(--text); background: var(--bg2); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: .2rem .4rem; }
+    footer { text-align: center; color: var(--muted); font-size: .75rem; padding: 1rem; border-top: 1px solid var(--line); }
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--yellow); }
+    @media (max-width: 800px) { .title em, .keys { display: none; } .bar { gap: .6rem; } }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <a class="home" href="../" title="Back to BitSwizzler.io"><small>&#9664; LAB</small>Bit<span>Swizzler</span>.io</a>
+    <div class="title">CollisionLab <em>SAT &middot; GJK &middot; MPR &middot; broadphase</em></div>
+    <div class="spacer"></div>
+    <button type="button" onclick="goFullScreen()" title="Fullscreen (F11)">Fullscreen</button>
+    <button type="button" onclick="location.reload()" title="Restart (also use this after pressing Esc, which quits the app)">Restart</button>
+  </div>
+
+  <div class="stage">
+    <div class="frame">
+      <canvas id="canvas" oncontextmenu="event.preventDefault()" tabindex="0"></canvas>
+      <div class="loading" id="loading"><div class="ring"></div><div class="pct" id="pct">Loading</div><div id="status">Fetching LÖVE runtime&hellip;</div></div>
+    </div>
+  </div>
+
+  <div class="keys">
+    <span><kbd>F2</kbd> switch Narrowphase / Broadphase</span>
+    <span><kbd>F11</kbd> fullscreen</span>
+    <span><kbd>F1</kbd> or <kbd>?</kbd> field notes</span>
+    <span><kbd>R</kbd> reset scene</span>
+    <span><kbd>Esc</kbd> close notes &middot; <em>quits when notes are closed &mdash; use Restart</em></span>
+    <span>mouse: drag shapes &middot; wheel: zoom / rotate</span>
+  </div>
+
+  <footer>A BitSwizzler lab &middot; LÖVE 11.4 running in your browser via <a href="https://github.com/Davidobot/love.js" rel="noopener">love.js</a> &middot; <a href="../">bitswizzler.io</a></footer>
+
+  <script>
+    function goFullScreen() {
+      // Fullscreen is handled *inside* LÖVE (F11 -> love.window.setFullscreen in main.lua) so SDL
+      // owns the canvas resize and love.resize fires on enter and exit. Driving fullscreen from the
+      // DOM or from Module.requestFullscreen leaves LÖVE with a stale viewport (black / grey screen).
+      // This button just sends F11 to the canvas while the click's user activation is still fresh.
+      var c = document.getElementById('canvas');
+      c.focus();
+      ['keydown', 'keyup'].forEach(function (type) {
+        c.dispatchEvent(new KeyboardEvent(type, { key: 'F11', code: 'F11', keyCode: 122, which: 122, bubbles: true, cancelable: true }));
+      });
+    }
+    // keep the browser from hijacking keys the lab uses (F1 = browser help, space/arrows = scroll)
+    window.addEventListener('keydown', function (e) {
+      if (['F1', 'F2', 'F11', ' ', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.key) > -1) e.preventDefault();
+    }, false);
+    window.onload = function () { window.focus(); };
+    window.onclick = function () { window.focus(); };
+
+    var loadingEl = document.getElementById('loading'), statusEl = document.getElementById('status'), pctEl = document.getElementById('pct');
+    var Module = {
+      arguments: ['./game.love'],
+      INITIAL_MEMORY: 16777216,
+      printErr: console.error.bind(console),
+      canvas: (function () {
+        var canvas = document.getElementById('canvas');
+        canvas.addEventListener('webglcontextlost', function (e) { statusEl.textContent = 'WebGL context lost — press Restart.'; loadingEl.style.display = 'grid'; e.preventDefault(); }, false);
+        return canvas;
+      })(),
+      setStatus: function (text) {
+        if (text) { statusEl.textContent = text; }
+        else if (Module.remainingDependencies === 0) {
+          loadingEl.style.display = 'none';
+          document.getElementById('canvas').style.visibility = 'visible';
+          document.getElementById('canvas').focus();
+        }
+      },
+      totalDependencies: 0, remainingDependencies: 0,
+      monitorRunDependencies: function (left) {
+        this.remainingDependencies = left;
+        this.totalDependencies = Math.max(this.totalDependencies, left);
+        var done = this.totalDependencies - left;
+        pctEl.textContent = left ? Math.round(done / this.totalDependencies * 100) + '%' : 'Ready';
+        Module.setStatus(left ? 'Preparing (' + done + '/' + this.totalDependencies + ')' : 'Starting…');
+      }
+    };
+    Module.setStatus('Downloading…');
+    window.onerror = function () {
+      Module.setStatus('Something went wrong — see the browser console.');
+      Module.setStatus = function (t) { if (t) Module.printErr('[post-exception status] ' + t); };
+    };
+    function applicationLoad() { Love(Module); }
+  </script>
+  <script src="game.js"></script>
+  <script async src="love.js" onload="applicationLoad()"></script>
+</body>
+</html>

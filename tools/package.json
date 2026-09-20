@@ -1,0 +1,8 @@
+{
+  "name": "bitswizzler-site-tools",
+  "private": true,
+  "description": "Build tooling for bitswizzler.io (love.js for the CollisionLab web build).",
+  "devDependencies": {
+    "love.js": "11.4.1"
+  }
+}

@@ -1,0 +1,45 @@
+# ---------------------------------------------------------------
+# BitSwizzler.io
+# Source masters and build output stay local. Everything the live
+# site actually serves IS committed, so a git-connected host
+# (Cloudflare Pages, Netlify, GitHub Pages) deploys the right set.
+# tools/build-deploy.ps1 stages the same set into dist/ for
+# drag-and-drop hosts.
+# ---------------------------------------------------------------
+
+# Staged deploy output
+/dist/
+
+# Build tooling that regenerates itself
+/tools/node_modules/
+/tools/build/
+/tools/tex/
+
+# --- Asset masters -----------------------------------------------
+# The site loads the derived *_web.* files; these are the sources
+# the scripts in tools/ convert. Keep them on disk, out of git.
+
+# Full-resolution sculpts -> assets/models/*_web.glb
+/assets/models/Grogg.glb
+/assets/models/Joule.glb
+/assets/models/Monster.glb
+/assets/models/TheEvidence.glb
+/assets/models/robot.glb
+
+# Untrimmed 1080p gameplay captures -> assets/videos/gameN.mp4
+/assets/videos/*_full.mp4
+
+# Full-size hero art -> assets/images/*_web.webp
+/assets/images/*.png
+
+# Full-resolution scan -> assets/drawings/Escher_web.jpg
+/assets/drawings/Escher.jpg
+
+# --- Local only ---------------------------------------------------
+serve.bat
+
+# OS / editor noise
+Thumbs.db
+desktop.ini
+.DS_Store
+*.swp

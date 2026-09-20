@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Showcase — BitSwizzler.io</title>
+  <meta name="description" content="BitSwizzler showcase: 3D models, charcoal and pencil drawings, and digital art from the studio.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="module">
+    import 'https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js';
+    // Draco-compressed GLBs need a decoder; serve it from the same CDN as model-viewer itself.
+    customElements.get('model-viewer').dracoDecoderLocation = 'https://cdn.jsdelivr.net/npm/three@0.172.0/examples/jsm/libs/draco/gltf/';
+  </script>
+</head>
+<body class="page-showcase">
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header" id="top">
+    <a class="wordmark" href="index.html">Bit<span>Swizzler</span>.io</a>
+    <nav class="nav">
+      <a href="index.html#games">Games</a>
+      <a href="#top" class="active">Showcase</a>
+    </nav>
+    <div class="store-links">
+      <a class="btn btn-steam" href="https://store.steampowered.com/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.7 2 2.4 6.1 2 11.3l5.4 2.2c.5-.3 1-.5 1.6-.5h.2l2.4-3.5v-.1c0-2.1 1.7-3.8 3.8-3.8s3.8 1.7 3.8 3.8-1.7 3.8-3.8 3.8h-.1l-3.4 2.4v.2c0 1.6-1.3 2.9-2.9 2.9-1.4 0-2.6-1-2.8-2.4L2.3 14.7C3.5 19 7.4 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm-5.7 15.3l-1.2-.5c.2.5.6.9 1.1 1.1 1.1.5 2.4 0 2.9-1.1.2-.5.2-1.1 0-1.7-.2-.5-.6-1-1.2-1.2-.5-.2-1.1-.2-1.6 0l1.3.5c.8.3 1.2 1.3.9 2.1-.4.8-1.4 1.2-2.2.8zm9.1-5.4c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5 2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5zm0-4.4c-1 0-1.9.8-1.9 1.9s.8 1.9 1.9 1.9 1.9-.8 1.9-1.9-.9-1.9-1.9-1.9z"/></svg>
+        Steam
+      </a>
+      <a class="btn btn-itch" href="https://itch.io/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.1 3.4C2.2 4 .4 5.9.3 6.4v1.5c0 1.9 1.8 3.6 3.4 3.6 1.9 0 3.5-1.6 3.5-3.5 0 1.9 1.5 3.5 3.4 3.5s3.4-1.6 3.4-3.5c0 1.9 1.6 3.5 3.5 3.5s3.4-1.6 3.4-3.5c0 1.9 1.6 3.5 3.5 3.5 1.6 0 3.4-1.7 3.4-3.6V6.4c-.1-.5-1.9-2.4-2.8-3C18.3 3.3 15.4 3.3 12 3.3s-6.3.1-9 .1zm5.9 8.8c-.4.6-.9 1.1-1.5 1.4-.6.4-1.3.5-2 .5-.2 0-.4 0-.6-.1v3.9c0 .9 0 1.6.1 2.1.2 1.2.5 1.3 1.7 1.4 1.9.1 3.9.2 5.3.2s3.4-.1 5.3-.2c1.2-.1 1.5-.2 1.7-1.4.1-.5.1-1.2.1-2.1v-3.9c-.2.1-.4.1-.6.1-.7 0-1.4-.2-2-.5-.6-.3-1.1-.8-1.5-1.4-.4.6-.9 1.1-1.5 1.4-.6.4-1.3.5-2 .5s-1.4-.2-2-.5c-.6-.3-1.1-.8-1.5-1.4zm3 2.3c.6 0 1.1.2 1.5.5.4.3.8.7 1 1.2.4.9.8 1.8 1.2 2.7l.2.6h-1.7l-.2-.6h-4l-.2.6H8.1l.2-.6c.4-.9.8-1.8 1.2-2.7.2-.5.6-.9 1-1.2.4-.3.9-.5 1.5-.5zm0 1.5c-.2 0-.4.1-.5.2-.2.1-.3.3-.4.5l-.6 1.4h3l-.6-1.4c-.1-.2-.2-.4-.4-.5-.1-.1-.3-.2-.5-.2z"/></svg>
+        Itch.io
+      </a>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+  </header>
+
+  <!-- ===== PAGE HERO ===== -->
+  <section class="page-hero" id="top">
+    <div class="page-hero-content">
+      <p class="eyebrow">BitSwizzler Studio</p>
+      <h1 class="hero-title">Show<span>case</span></h1>
+      <p class="hero-sub">Lorem ipsum dolor sit amet, consectetur adipiscing elit. The models, sketches and paintings behind the games.</p>
+    </div>
+  </section>
+
+  <nav class="subnav" aria-label="Showcase categories">
+    <a href="#3d">3D</a>
+    <a href="#drawings">Drawings</a>
+    <a href="#digital">Digital</a>
+  </nav>
+
+  <!-- ===== 3D ===== -->
+  <section class="category angled tone-a" data-dir="right" id="3d">
+    <div class="category-head reveal from-left">
+      <span class="section-num">01</span>
+      <h2>3D</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Real-time PBR models &mdash; drag to rotate, scroll to zoom.</p>
+    </div>
+  </section>
+
+  <section class="model-section angled tone-b" data-dir="left">
+    <div class="game-inner flip">
+      <div class="copy reveal from-left">
+        <span class="section-num">3D &middot; 01</span>
+        <h2>Monster</h2>
+        <p class="tagline">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Drag to rotate, scroll to zoom.</p>
+        <div class="tags"><span>Creature</span><span>Sculpt</span><span>1.7M tris</span></div>
+      </div>
+      <div class="media reveal from-right">
+        <div class="model-frame">
+          <model-viewer src="assets/models/Monster_web.glb" alt="Monster 3D model"
+            camera-controls auto-rotate auto-rotate-delay="800" rotation-per-second="20deg"
+            shadow-intensity="1.2" shadow-softness="0.8" exposure="1.1" tone-mapping="neutral"
+            environment-image="neutral" touch-action="pan-y" loading="lazy" reveal="auto"
+            interaction-prompt="auto">
+            <div class="model-placeholder" slot="poster">
+              <div class="cube"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              <p>Loading model&hellip;</p>
+            </div>
+            <div class="model-progress" slot="progress-bar"><div class="bar"></div></div>
+          </model-viewer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="model-section angled tone-a" data-dir="right">
+    <div class="game-inner flip">
+      <div class="copy reveal from-left">
+        <span class="section-num">3D &middot; 02</span>
+        <h2>Evidence</h2>
+        <p class="tagline">Nemo enim ipsam voluptatem quia voluptas sit aspernatur.</p>
+        <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur.</p>
+        <div class="tags"><span>Prop</span><span>Sculpt</span><span>879k tris</span></div>
+      </div>
+      <div class="media reveal from-right">
+        <div class="model-frame">
+          <model-viewer src="assets/models/TheEvidence_web.glb" alt="The Evidence 3D model"
+            camera-controls auto-rotate auto-rotate-delay="800" rotation-per-second="20deg"
+            shadow-intensity="1.2" shadow-softness="0.8" exposure="1.1" tone-mapping="neutral"
+            environment-image="neutral" touch-action="pan-y" loading="lazy" reveal="auto"
+            interaction-prompt="auto">
+            <div class="model-placeholder" slot="poster">
+              <div class="cube"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              <p>Loading model&hellip;</p>
+            </div>
+            <div class="model-progress" slot="progress-bar"><div class="bar"></div></div>
+          </model-viewer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="model-section angled tone-b" data-dir="left">
+    <div class="game-inner flip">
+      <div class="copy reveal from-left">
+        <span class="section-num">3D &middot; 03</span>
+        <h2>Joule</h2>
+        <p class="tagline">At vero eos et accusamus et iusto odio dignissimos.</p>
+        <p>Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
+        <div class="tags"><span>Character</span><span>Hard Surface</span><span>Emissive</span></div>
+      </div>
+      <div class="media reveal from-right">
+        <div class="model-frame">
+          <model-viewer src="assets/models/Joule_web.glb" alt="Joule 3D model"
+            camera-controls auto-rotate auto-rotate-delay="800" rotation-per-second="20deg"
+            shadow-intensity="1.2" shadow-softness="0.8" exposure="1.1" tone-mapping="neutral"
+            environment-image="neutral" touch-action="pan-y" loading="lazy" reveal="auto"
+            interaction-prompt="auto">
+            <div class="model-placeholder" slot="poster">
+              <div class="cube"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              <p>Loading model&hellip;</p>
+            </div>
+            <div class="model-progress" slot="progress-bar"><div class="bar"></div></div>
+            <button class="wire-toggle" type="button" aria-pressed="false" title="Toggle wireframe">Wire</button>
+          </model-viewer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="model-section angled tone-a" data-dir="right">
+    <div class="game-inner flip">
+      <div class="copy reveal from-left">
+        <span class="section-num">3D &middot; 04</span>
+        <h2>Robot</h2>
+        <p class="tagline">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
+        <div class="tags"><span>Character</span><span>Hard Surface</span><span>Steel</span></div>
+      </div>
+      <div class="media reveal from-right">
+        <div class="model-frame">
+          <model-viewer src="assets/models/robot_web.glb" alt="Robot 3D model"
+            camera-controls auto-rotate auto-rotate-delay="800" rotation-per-second="20deg"
+            shadow-intensity="1.2" shadow-softness="0.8" exposure="1.1" tone-mapping="neutral"
+            environment-image="neutral" touch-action="pan-y" loading="lazy" reveal="auto"
+            interaction-prompt="auto">
+            <div class="model-placeholder" slot="poster">
+              <div class="cube"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              <p>Loading model&hellip;</p>
+            </div>
+            <div class="model-progress" slot="progress-bar"><div class="bar"></div></div>
+          </model-viewer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="model-section angled tone-b" data-dir="left">
+    <div class="game-inner flip">
+      <div class="copy reveal from-left">
+        <span class="section-num">3D &middot; 05</span>
+        <h2>Grogg</h2>
+        <p class="tagline">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
+        <div class="tags"><span>Creature</span><span>Sculpt</span><span>150k tris</span></div>
+      </div>
+      <div class="media reveal from-right">
+        <div class="model-frame">
+          <model-viewer src="assets/models/Grogg_web.glb" alt="Grogg 3D model"
+            camera-controls auto-rotate auto-rotate-delay="800" rotation-per-second="20deg"
+            shadow-intensity="1.2" shadow-softness="0.8" exposure="1.1" tone-mapping="neutral"
+            environment-image="neutral" touch-action="pan-y" loading="lazy" reveal="auto"
+            interaction-prompt="auto">
+            <div class="model-placeholder" slot="poster">
+              <div class="cube"><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              <p>Loading model&hellip;</p>
+            </div>
+            <div class="model-progress" slot="progress-bar"><div class="bar"></div></div>
+          </model-viewer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DRAWINGS ===== -->
+  <section class="gallery-section angled tone-a" data-dir="right" id="drawings">
+    <div class="gallery-inner">
+      <div class="category-head reveal from-left">
+        <span class="section-num">02</span>
+        <h2>Drawings</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Charcoal and pencil on paper. Click any piece to view it large.</p>
+      </div>
+      <div class="gallery masonry">
+        <figure class="reveal from-left" style="--i:0">
+          <a href="assets/drawings/DSCN0709.JPG" data-title="Seated Figure" data-medium="Charcoal"><img src="assets/drawings/DSCN0709.JPG" width="1024" height="768" alt="Seated Figure &mdash; Charcoal" loading="lazy"></a>
+          <figcaption><strong>Seated Figure</strong><span>Charcoal</span></figcaption>
+        </figure>
+        <figure class="reveal from-right" style="--i:1">
+          <a href="assets/drawings/DSCN0712.JPG" data-title="Crouched Figure" data-medium="Charcoal"><img src="assets/drawings/DSCN0712.JPG" width="768" height="1024" alt="Crouched Figure &mdash; Charcoal" loading="lazy"></a>
+          <figcaption><strong>Crouched Figure</strong><span>Charcoal</span></figcaption>
+        </figure>
+        <figure class="reveal from-left" style="--i:2">
+          <a href="assets/drawings/DSCN0710.JPG" data-title="Reclining Figure" data-medium="Charcoal"><img src="assets/drawings/DSCN0710.JPG" width="1024" height="768" alt="Reclining Figure &mdash; Charcoal" loading="lazy"></a>
+          <figcaption><strong>Reclining Figure</strong><span>Charcoal</span></figcaption>
+        </figure>
+        <figure class="reveal from-right" style="--i:3">
+          <a href="assets/drawings/Escher_web.jpg" data-title="After Escher" data-medium="Pencil"><img src="assets/drawings/Escher_web.jpg" width="1165" height="1600" alt="After Escher &mdash; Pencil" loading="lazy"></a>
+          <figcaption><strong>After Escher</strong><span>Pencil</span></figcaption>
+        </figure>
+        <figure class="reveal from-left" style="--i:4">
+          <a href="assets/drawings/DSCN0719.JPG" data-title="Sketch Wall" data-medium="Mixed"><img src="assets/drawings/DSCN0719.JPG" width="1024" height="768" alt="Sketch Wall &mdash; Mixed" loading="lazy"></a>
+          <figcaption><strong>Sketch Wall</strong><span>Mixed</span></figcaption>
+        </figure>
+        <figure class="reveal from-right" style="--i:5">
+          <a href="assets/drawings/DSCN0770.JPG" data-title="Figure on Toned Paper" data-medium="Pencil"><img src="assets/drawings/DSCN0770.JPG" width="768" height="1024" alt="Figure on Toned Paper &mdash; Pencil" loading="lazy"></a>
+          <figcaption><strong>Figure on Toned Paper</strong><span>Pencil</span></figcaption>
+        </figure>
+        <figure class="reveal from-left" style="--i:6">
+          <a href="assets/drawings/DSCN0720.JPG" data-title="Windswept" data-medium="Pencil &amp; Ink"><img src="assets/drawings/DSCN0720.JPG" width="768" height="1024" alt="Windswept &mdash; Pencil &amp; Ink" loading="lazy"></a>
+          <figcaption><strong>Windswept</strong><span>Pencil &amp; Ink</span></figcaption>
+        </figure>
+        <figure class="reveal from-right" style="--i:7">
+          <a href="assets/drawings/Tackett_Michael_W5A2.jpg" data-title="Birdhouse Perspective" data-medium="Pencil"><img src="assets/drawings/Tackett_Michael_W5A2.jpg" width="1050" height="765" alt="Birdhouse Perspective &mdash; Pencil" loading="lazy"></a>
+          <figcaption><strong>Birdhouse Perspective</strong><span>Pencil</span></figcaption>
+        </figure>
+        <figure class="reveal from-left" style="--i:8">
+          <a href="assets/drawings/001-3.jpg" data-title="Draped Figure" data-medium="Ink"><img src="assets/drawings/001-3.jpg" width="1615" height="2217" alt="Draped Figure &mdash; Ink" loading="lazy"></a>
+          <figcaption><strong>Draped Figure</strong><span>Ink</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DIGITAL ===== -->
+  <section class="gallery-section angled tone-b" data-dir="left" id="digital">
+    <div class="gallery-inner">
+      <div class="category-head reveal from-left">
+        <span class="section-num">03</span>
+        <h2>Digital</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Paintings, characters and concept work.</p>
+      </div>
+      <div class="gallery masonry">
+        <figure class="reveal from-left" style="--i:0">
+          <a href="assets/digital/HeadScrew2.jpg" data-title="Head Screw" data-medium="Digital painting"><img src="assets/digital/HeadScrew2.jpg" width="729" height="459" alt="Head Screw &mdash; Digital painting" loading="lazy"></a>
+          <figcaption><strong>Head Screw</strong><span>Digital painting</span></figcaption>
+        </figure>
+        <figure class="reveal from-right" style="--i:1">
+          <a href="assets/digital/JasmalTheBarbarian.jpg" data-title="Jasmal the Barbarian" data-medium="Digital painting"><img src="assets/digital/JasmalTheBarbarian.jpg" width="236" height="550" alt="Jasmal the Barbarian &mdash; Digital painting" loading="lazy"></a>
+          <figcaption><strong>Jasmal the Barbarian</strong><span>Digital painting</span></figcaption>
+        </figure>
+        <figure class="reveal from-left" style="--i:2">
+          <a href="assets/digital/Alien.jpg" data-title="Alien" data-medium="Digital sculpture"><img src="assets/digital/Alien.jpg" width="960" height="540" alt="Alien &mdash; Digital sculpture" loading="lazy"></a>
+          <figcaption><strong>Alien</strong><span>Digital sculpture</span></figcaption>
+        </figure>
+        <figure class="reveal from-right" style="--i:3">
+          <a href="assets/digital/chauvanism.jpg" data-title="Chauvanism" data-medium="Vector illustration"><img src="assets/digital/chauvanism.jpg" width="798" height="720" alt="Chauvanism &mdash; Vector illustration" loading="lazy"></a>
+          <figcaption><strong>Chauvanism</strong><span>Vector illustration</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a class="wordmark small" href="index.html">Bit<span>Swizzler</span>.io</a>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Also reachable at <a href="https://bitswizzler.com">bitswizzler.com</a>.</p>
+      <div class="store-links">
+        <a class="btn btn-steam" href="https://store.steampowered.com/" target="_blank" rel="noopener">Steam</a>
+        <a class="btn btn-itch" href="https://itch.io/" target="_blank" rel="noopener">Itch.io</a>
+      </div>
+      <p class="lab-link"><span>Lab:</span> <a href="foley/" title="Foley Fun — a procedural sound-effect lab">Foley Fun</a> <span class="sep">&middot;</span> <a href="collisionlab/" title="CollisionLab — SAT / GJK / MPR and broadphase, interactive">CollisionLab</a> <span class="sep">&middot;</span> <a href="https://github.com/BitSwizzlerio" target="_blank" rel="noopener" title="BitSwizzler on GitHub">GitHub</a></p>
+      <p class="copyright">&copy; <span id="year"></span> BitSwizzler. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+
+  <!-- ===== LIGHTBOX (driven by js/main.js) ===== -->
+  <div class="lightbox" hidden>
+    <button class="lb-close" aria-label="Close">&times;</button>
+    <button class="lb-prev" aria-label="Previous">&#10094;</button>
+    <figure><img alt=""><figcaption></figcaption></figure>
+    <button class="lb-next" aria-label="Next">&#10095;</button>
+  </div>
+</body>
+</html>
