@@ -29,10 +29,14 @@ window.Foley = window.Foley || {};
     buildShell() {
       return el('div', { class: 'app' }, [
         el('header', { class: 'topbar' }, [
+          el('a', { class: 'site-home', href: '../', title: 'Back to BitSwizzler.io' }, [el('span', { class: 'site-home-arrow' }, ['◀']), el('span', {}, ['Bit', el('b', {}, ['Swizzler']), '.io'])]),
           el('div', { class: 'brand' }, [el('span', { class: 'logo' }, ['🎛️']), el('span', {}, ['Foley Fun']), el('span', { class: 'sub' }, ['procedural game SFX board'])]),
           el('input', { id: 'bankName', class: 'bank-name', title: 'Bank name', onchange: e => S.update(s => s.bankName = e.target.value, 'none') }),
           el('span', { id: 'dirty', class: 'dirty', title: 'Unsaved changes (Ctrl+S saves to the browser library)' }, ['']),
           el('div', { class: 'spacer' }),
+          // Compact (phone) top bar: the toolbar folds behind ☰, so Stop stays one tap away.
+          el('button', { class: 'ghost m-only', title: 'Stop all voices and loops', onclick: () => E.stopAll() }, ['■']),
+          el('button', { class: 'ghost m-only', title: 'Menu', 'aria-label': 'Menu', 'aria-expanded': 'false', onclick: e => { const bar = e.currentTarget.closest('.topbar'); const open = bar.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', String(open)); } }, ['☰']),
           el('div', { class: 'toolbar' }, [
             el('button', { class: 'primary', id: 'saveBtn', title: 'Save this bank in the browser library (Ctrl+S)', onclick: () => UI.saveBank() }, ['💾 Save']),
             el('button', { id: 'banksBtn', title: 'Your saved banks', onclick: () => UI.banksDialog() }, ['Banks…']),
@@ -56,7 +60,8 @@ window.Foley = window.Foley || {};
             el('div', { id: 'tabs', class: 'tabs' }),
             el('div', { class: 'board-tools' }, [
               el('input', { id: 'filter', placeholder: 'Filter pads…', oninput: e => { S.state.filter = e.target.value; UI.renderBoard(); } }),
-              el('span', { class: 'hint' }, ['Click a pad or press its key · drag to reorder · Space = preview selected · Esc = stop · Ctrl+Z undo']),
+              el('span', { class: 'hint hint-desktop' }, ['Click a pad or press its key · drag to reorder · Space = preview selected · Esc = stop · Ctrl+Z undo']),
+              el('span', { class: 'hint hint-touch' }, ['Tap a pad to play · long-press for options']),
             ]),
             el('div', { id: 'board', class: 'board' }),
           ]),
@@ -107,8 +112,11 @@ window.Foley = window.Foley || {};
               e.preventDefault(); // no synthetic mouse events / no scroll-drag from a pad
               const x = e.clientX, y = e.clientY; let fired = false;
               UI._lp = setTimeout(() => { fired = true; UI._lp = null; UI.padMenu(p, x, y); }, 500);
-              const cancel = () => { if (UI._lp) { clearTimeout(UI._lp); UI._lp = null; if (!fired) { UI.triggerPad(p); S.select(p.id); } } padEl.removeEventListener('pointerup', cancel); padEl.removeEventListener('pointercancel', cancel); padEl.removeEventListener('pointerleave', cancel); };
-              padEl.addEventListener('pointerup', cancel); padEl.addEventListener('pointercancel', cancel); padEl.addEventListener('pointerleave', cancel);
+              // Only a finger lifted ON the pad plays it. pointercancel means the browser took the touch over as a
+              // scroll (or another gesture); playing there made every swipe across the board fire a sound.
+              const finish = play => { if (UI._lp) { clearTimeout(UI._lp); UI._lp = null; if (play && !fired) { UI.triggerPad(p); S.select(p.id); } } padEl.removeEventListener('pointerup', onUp); padEl.removeEventListener('pointercancel', onAbort); padEl.removeEventListener('pointerleave', onAbort); };
+              const onUp = () => finish(true), onAbort = () => finish(false);
+              padEl.addEventListener('pointerup', onUp); padEl.addEventListener('pointercancel', onAbort); padEl.addEventListener('pointerleave', onAbort);
               return;
             }
             UI.triggerPad(p); S.select(p.id);

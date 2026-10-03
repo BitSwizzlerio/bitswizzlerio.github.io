@@ -17,7 +17,8 @@
     return { input, setVowel(t, v, ramp) { const fr = VOWELS[v] || VOWELS.a; fs.forEach((f, i) => { const target = fr[i] / size; if (ramp > 0) { f.frequency.setValueAtTime(f.frequency.value, t); f.frequency.exponentialRampToValueAtTime(target, t + ramp); } else f.frequency.setValueAtTime(target, t); }); }, formants: fs };
   }
   /* Glottal source with pitch contour [[u, hz], ...], roughness (jitter + AM), returns gain node to envelope. */
-  function glottis(ctx, rng, t0, dur, contour, rough, wave) {
+  function glottis(ctx, rng, t0, dur, contour, rough, wave, fry) {
+    fry = fry || 0;
     const o = DSP.osc(ctx, wave || 'sawtooth', contour[0][1], t0, dur);
     o.frequency.setValueAtTime(contour[0][1], t0);
     for (let i = 1; i < contour.length; i++) o.frequency.exponentialRampToValueAtTime(Math.max(20, contour[i][1]), t0 + contour[i][0] * dur);
@@ -26,6 +27,13 @@
     if (rough > 0.3) { const rn = DSP.noise(ctx, rng, t0, dur, 'white'); const rf = DSP.filter(ctx, 'lowpass', 60 + rough * 120, 1); const rg = DSP.gain(ctx, rough * 1200); DSP.chain(rn, rf, rg, o.detune); }
     const lp = DSP.filter(ctx, 'lowpass', 2500, 0.5); // glottal spectral tilt
     const g = DSP.gain(ctx, 0); DSP.chain(o, lp, g);
+    if (fry > 0) { // vocal fry / creak: a period-doubling subharmonic with heavy wander under the voice (opt-in; normal voices unaffected)
+      const o2 = DSP.osc(ctx, wave || 'sawtooth', Math.max(15, contour[0][1] / 2), t0, dur);
+      o2.frequency.setValueAtTime(Math.max(15, contour[0][1] / 2), t0);
+      for (let i = 1; i < contour.length; i++) o2.frequency.exponentialRampToValueAtTime(Math.max(15, contour[i][1] / 2), t0 + contour[i][0] * dur);
+      const jn2 = DSP.noise(ctx, rng, t0, dur, 'brown'); DSP.chain(jn2, DSP.gain(ctx, 120 + fry * 260), o2.detune);
+      DSP.chain(o2, DSP.gain(ctx, fry * 0.6), lp);
+    }
     if (rough > 0.5) { const am = DSP.osc(ctx, 'square', 25 + rng.next() * 30, t0, dur); const amg = DSP.gain(ctx, (rough - 0.5) * 0.8); const base = DSP.gain(ctx, 1); DSP.chain(am, amg, base.gain); g.connect(base); return { node: base, env: g }; }
     return { node: g, env: g };
   }
@@ -33,7 +41,7 @@
   function syllable(ctx, out, rng, t0, dur, o) {
     const tr = tract(ctx, out, o.size || 1, o.nasal || 0);
     tr.setVowel(t0, o.vowel || 'a', 0); if (o.vowel2) tr.setVowel(t0 + dur * (o.morphAt || 0.4), o.vowel2, dur * 0.4);
-    const gl = glottis(ctx, rng, t0, dur + 0.05, o.f0, o.rough || 0, o.wave);
+    const gl = glottis(ctx, rng, t0, dur + 0.05, o.f0, o.rough || 0, o.wave, o.fry || 0);
     DSP.env(gl.env.gain, t0, { a: o.attack || 0.02, d: dur * (o.decayFrac || 0.7), s: o.sustain === undefined ? 0.5 : o.sustain, hold: 0, r: o.release || dur * 0.3, peak: (o.amp || 0.8) * 0.9, curve: 'lin' });
     gl.node.connect(tr.input);
     if (o.breath > 0) { const n = DSP.noise(ctx, rng, t0, dur + 0.05, 'pink'); const ng = DSP.gain(ctx, 0); DSP.env(ng.gain, t0, { a: o.attack || 0.02, d: dur * 0.7, s: 0.4, r: dur * 0.3, peak: o.breath * 0.8, curve: 'lin' }); DSP.chain(n, ng, tr.input); }

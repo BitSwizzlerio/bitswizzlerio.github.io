@@ -1,0 +1,89 @@
+{
+  "format": "foley-bank",
+  "version": 1,
+  "bankName": "Death Rattle",
+  "pads": [
+    {
+      "id": "pmu7hxi2og",
+      "name": "Death Rattle",
+      "icon": "☠️",
+      "color": "#6f7d63",
+      "key": "",
+      "layers": [
+        {
+          "id": "pmu7hxi2oh",
+          "gain": 0,
+          "pan": 0,
+          "offset": 0,
+          "mute": false,
+          "solo": false,
+          "open": true,
+          "repeat": 1,
+          "every": 0.25,
+          "jitter": 0.2,
+          "hp": 20,
+          "lp": 20000,
+          "drive": 0,
+          "gen": "ghoul",
+          "params": {
+            "type": "death-rattle",
+            "length": 2.4,
+            "pitch": 1,
+            "size": 1.6,
+            "rasp": 0.6,
+            "crack": 0.7,
+            "breath": 0.6
+          }
+        }
+      ],
+      "fx": {
+        "pitch": 0,
+        "hp": 20,
+        "lp": 20000,
+        "drive": 0,
+        "driveType": "soft",
+        "bits": 16,
+        "downsample": 1,
+        "body": "pipe",
+        "bodyAmount": 0.25,
+        "bodySize": 1.8,
+        "bodyDamp": 0.55,
+        "space": 0,
+        "spaceSize": 0.3,
+        "distance": 0,
+        "transAttack": 0,
+        "transSustain": 0,
+        "rattle": 0,
+        "rattleHz": 2200,
+        "rattleThreshold": 0.35,
+        "reverb": 0.22,
+        "reverbType": "cave",
+        "reverbSize": 0.5,
+        "reverbDamp": 0.6,
+        "delay": 0,
+        "delayTime": 0.18,
+        "delayFeedback": 0.35,
+        "reverse": false,
+        "normalize": true,
+        "normMode": "loudness",
+        "loudTarget": -20,
+        "fadeOut": 0.005,
+        "gain": 0,
+        "loopFade": 0
+      },
+      "seed": 295028,
+      "variations": 4,
+      "roundRobin": false,
+      "loop": false,
+      "intensity": 0.5,
+      "humanize": {
+        "pitch": 0.4,
+        "gain": 1,
+        "pan": 0
+      },
+      "pan": 0,
+      "tags": "",
+      "macros": []
+    }
+  ]
+}

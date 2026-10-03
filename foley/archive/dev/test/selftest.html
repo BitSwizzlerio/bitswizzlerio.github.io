@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Foley self-test</title></head>
+<body>
+<pre id="out">running…</pre>
+<script src="../../../js/core/prng.js"></script>
+<script src="../../../js/core/dsp.js"></script>
+<script src="../../../js/core/registry.js"></script>
+<script src="../../../js/core/engine.js"></script>
+<script src="../../../js/core/materials.js"></script>
+<script src="../../../js/core/ogg.js"></script>
+<script src="../../../js/generators/movement.js"></script>
+<script src="../../../js/generators/impacts.js"></script>
+<script src="../../../js/generators/ui.js"></script>
+<script src="../../../js/generators/weapons.js"></script>
+<script src="../../../js/generators/nature.js"></script>
+<script src="../../../js/generators/tonal.js"></script>
+<script src="../../../js/generators/electric.js"></script>
+<script src="../../../js/generators/earth.js"></script>
+<script src="../../../js/generators/body.js"></script>
+<script src="../../../js/generators/granular.js"></script>
+<script src="../../../js/generators/extras.js"></script>
+<script src="../../../js/app/store.js"></script>
+<script src="../../../js/app/library.js"></script>
+<script src="../../../js/app/starter-kit.js"></script>
+<script>
+(async () => {
+  const lines = []; const log = s => { lines.push(s); document.getElementById('out').textContent = lines.join('\n'); };
+  const errs = []; window.onerror = (m, s, l) => errs.push(m + ' @' + s + ':' + l);
+  const origErr = console.error; console.error = (...a) => { errs.push(a.map(String).join(' ')); origErr(...a); };
+  const stats = b => { let peak = 0, sum = 0; for (let c = 0; c < b.numberOfChannels; c++) { const d = b.getChannelData(c); for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); if (v > peak) peak = v; sum += v * v; if (!isFinite(d[i])) return { nan: true }; } } return { peak, rms: Math.sqrt(sum / (b.length * b.numberOfChannels)) }; };
+  let pass = 0, fail = 0; let tiltRatio = null; // (assigned in the masonry block, used by later blocks)
+  try {
+  // sanity: every material mode table must be finite (a NaN frequency would throw inside BiquadFilter and kill the page)
+  { const M = Foley.Materials; const bad = []; for (const k of Object.keys(M.WOOD)) M.woodTable(k).forEach(m => { if (!m.every(isFinite)) bad.push('wood:' + k); }); for (const k of Object.keys(M.MASONRY)) M.masonryTable(k).forEach(m => { if (!m.every(isFinite)) bad.push('masonry:' + k); }); if (bad.length) { fail++; log('FAIL non-finite modes in ' + [...new Set(bad)].join(', ')); } else { pass++; log('PASS all material mode tables finite'); } }
+  const check = async (name, pad) => {
+    try {
+      const t = performance.now(); const b = await Foley.Engine.render(pad, 12345); const s = stats(b);
+      if (s.nan) throw new Error('NaN in output');
+      if (s.peak < 0.01) throw new Error('silent output (peak ' + s.peak.toFixed(4) + ')');
+      pass++; log('PASS ' + name.padEnd(34) + b.duration.toFixed(2) + 's peak=' + s.peak.toFixed(2) + ' rms=' + s.rms.toFixed(3) + ' ' + (performance.now() - t).toFixed(0) + 'ms');
+    } catch (e) { fail++; log('FAIL ' + name + ' :: ' + (e && e.message || e)); }
+  };
+  // 1) each generator with defaults, and with 2 random param sets
+  for (const g of Foley.generatorList) {
+    await check('gen:' + g.id + ' (default)', { layers: [{ gen: g.id, params: Foley.defaultParams(g.id) }], fx: {}, seed: 1, variations: 1 });
+    for (let k = 0; k < 2; k++) await check('gen:' + g.id + ' (random ' + k + ')', { layers: [{ gen: g.id, params: Foley.randomParams(g.id, new Foley.PRNG(77 + k), 1) }], fx: {}, seed: 1, variations: 1 });
+  }
+  // 2) full FX chain
+  await check('fx:all', { layers: [{ gen: 'impact', params: Foley.defaultParams('impact') }], fx: { pitch: -5, hp: 100, lp: 8000, drive: 0.5, driveType: 'fold', bits: 8, downsample: 4, reverb: 0.4, delay: 0.3, reverse: true, normalize: true }, seed: 1 });
+  // 2b) loop crossfade: boundary continuity + length reduction
+  {
+    const padL = { layers: [{ gen: 'wind', params: Object.assign(Foley.defaultParams('wind'), { length: 1.5, loop: true }) }], fx: {}, seed: 5 };
+    const dry = await Foley.Engine.render(padL, 5);
+    const xf = await Foley.Engine.render(Object.assign({}, padL, { fx: { loopFade: 200 } }), 5);
+    const F = Math.floor(0.2 * dry.sampleRate);
+    const d = xf.getChannelData(0); const jump = Math.abs(d[d.length - 1] - d[0]);
+    let maxStep = 0; for (let i = 1; i < d.length; i++) maxStep = Math.max(maxStep, Math.abs(d[i] - d[i - 1]));
+    const expectLen = Math.round(1.5 * dry.sampleRate) - F; // loop pads are cut at their musical length (1.5 s here) before the crossfade
+    const okLen = xf.length <= expectLen + 100 && xf.length >= expectLen - Math.ceil(0.045 * dry.sampleRate) - 100; const okJump = jump <= maxStep * 1.5 + 0.02; // smart seam may shorten by ≤40 ms
+    if (okLen && okJump) { pass++; log('PASS loop crossfade: len ' + dry.length + '->' + xf.length + ', seam jump ' + jump.toFixed(4) + ' (max in-buffer step ' + maxStep.toFixed(4) + ')'); }
+    else { fail++; log('FAIL loop crossfade: okLen=' + okLen + ' (' + dry.length + '->' + xf.length + ', F=' + F + ') okJump=' + okJump + ' jump=' + jump + ' maxStep=' + maxStep); }
+  }
+  // 2c) body resonator: every body renders, changes the sound, and 'none' is bit-identical to bypass
+  {
+    const base = { layers: [{ gen: 'impact', params: Foley.defaultParams('impact') }], fx: {}, seed: 9 };
+    const dry = await Foley.Engine.render(base, 9);
+    const none = await Foley.Engine.render(Object.assign({}, base, { fx: { body: 'none', bodyAmount: 1 } }), 9);
+    let same = none.length === dry.length; if (same) { const x = dry.getChannelData(0), y = none.getChannelData(0); for (let i = 0; i < x.length; i++) if (Math.abs(x[i] - y[i]) > 1e-3) { same = false; break; } }
+    if (same) { pass++; log('PASS body none == bypass'); } else { fail++; log('FAIL body none != bypass'); }
+    for (const b of Object.keys(Foley.Engine.BODIES)) {
+      if (b === 'none') continue;
+      await check('body:' + b, Object.assign({}, base, { fx: { body: b, bodyAmount: 1 } }));
+      const wet = await Foley.Engine.render(Object.assign({}, base, { fx: { body: b, bodyAmount: 1 } }), 9);
+      let diff = 0; const x = dry.getChannelData(0), y = wet.getChannelData(0); for (let i = 0; i < Math.min(x.length, y.length); i++) diff = Math.max(diff, Math.abs(x[i] - y[i]));
+      if (diff > 0.05 || wet.length !== dry.length) { pass++; } else { fail++; log('FAIL body ' + b + ' has no audible effect'); }
+    }
+    await check('body:size+damp', Object.assign({}, base, { fx: { body: 'bell', bodyAmount: 0.5, bodySize: 2.5, bodyDamp: 0.9 } }));
+  }
+  // 2d) wood material model: every kind renders, mode tables are dense & inharmonic, hits vary per seed, Space FX works
+  {
+    const M = Foley.Materials; const rng = new Foley.PRNG(7);
+    for (const kind of Object.keys(M.WOOD)) {
+      const modes = M.woodModes(kind, 1, rng, 0.3);
+      const byF = modes.slice().sort((a, b) => a.f - b.f); const fs = byF.map(m => m.f); const dec = byF.map(m => m.decay);
+      const harmonicLike = fs.filter((f, i) => i > 0 && Math.abs(f / fs[0] - Math.round(f / fs[0])) < 0.02).length;
+      const hiShorter = dec[dec.length - 1] < dec[0]; // highest mode must die faster than the lowest
+      if (modes.length >= 8 && harmonicLike <= 3 && hiShorter) { pass++; log('PASS wood modes ' + kind.padEnd(7) + modes.length + ' modes, f1=' + fs[0].toFixed(0) + 'Hz, ' + harmonicLike + ' near-harmonic, decay ' + dec[0].toFixed(3) + '→' + dec[dec.length - 1].toFixed(3) + 's'); }
+      else { fail++; log('FAIL wood modes ' + kind + ' n=' + modes.length + ' harmonicLike=' + harmonicLike + ' hiShorter=' + hiShorter); }
+      await check('wood:' + kind, { layers: [{ gen: 'impact', params: Object.assign(Foley.defaultParams('impact'), { material: 'wood', size: kind === 'stick' ? 0.1 : kind === 'beam' ? 0.9 : 0.5 }) }], fx: {}, seed: 3 });
+    }
+    const wp = { layers: [{ gen: 'impact', params: Object.assign(Foley.defaultParams('impact'), { material: 'wood' }) }], fx: {}, seed: 1 };
+    const w1 = await Foley.Engine.render(wp, 11), w2 = await Foley.Engine.render(wp, 12);
+    let dm = 0; { const x = w1.getChannelData(0), y = w2.getChannelData(0); for (let i = 0; i < Math.min(x.length, y.length); i++) dm = Math.max(dm, Math.abs(x[i] - y[i])); }
+    if (dm > 0.05) { pass++; log('PASS wood hits vary per seed (maxDiff ' + dm.toFixed(2) + ')'); } else { fail++; log('FAIL wood hits identical across seeds'); }
+    await check('fx:space', Object.assign({}, wp, { fx: { space: 0.6, spaceSize: 0.5 } }));
+    const dry = await Foley.Engine.render(wp, 11), sp = await Foley.Engine.render(Object.assign({}, wp, { fx: { space: 0.6, spaceSize: 0.5 } }), 11);
+    if (sp.length > dry.length || (() => { let d = 0; const x = dry.getChannelData(0), y = sp.getChannelData(0); for (let i = 0; i < Math.min(x.length, y.length); i++) d = Math.max(d, Math.abs(x[i] - y[i])); return d > 0.05; })()) { pass++; log('PASS space FX changes output'); } else { fail++; log('FAIL space FX has no effect'); }
+  }
+  // 2e) masonry model + coupled friction excitation
+  {
+    const M = Foley.Materials; const rng = new Foley.PRNG(21);
+    for (const kind of Object.keys(M.MASONRY)) {
+      const modes = M.masonryModes(kind, 1, rng, 0.3); const byF = modes.slice().sort((a, b) => a.f - b.f);
+      const harmonicLike = byF.filter((m, i) => i > 0 && Math.abs(m.f / byF[0].f - Math.round(m.f / byF[0].f)) < 0.02).length;
+      const maxDecay = Math.max.apply(null, modes.map(m => m.decay));
+      if (modes.length >= 8 && harmonicLike <= 3 && byF[byF.length - 1].decay < byF[0].decay && maxDecay < 0.5) { pass++; log('PASS masonry modes ' + kind.padEnd(9) + modes.length + ' modes, f1=' + byF[0].f.toFixed(0) + 'Hz, ' + harmonicLike + ' near-harmonic, max decay ' + maxDecay.toFixed(3) + 's'); }
+      else { fail++; log('FAIL masonry modes ' + kind + ' n=' + modes.length + ' harmonicLike=' + harmonicLike + ' maxDecay=' + maxDecay); }
+    }
+    const sp = { layers: [{ gen: 'scrape', params: Object.assign(Foley.defaultParams('scrape'), { pairing: 'brick/pavement', length: 1 }) }], fx: {}, seed: 1 };
+    const s1 = await Foley.Engine.render(sp, 31), s2 = await Foley.Engine.render(sp, 32);
+    let dm = 0; { const x = s1.getChannelData(0), y = s2.getChannelData(0); for (let i = 0; i < Math.min(x.length, y.length); i++) dm = Math.max(dm, Math.abs(x[i] - y[i])); }
+    if (dm > 0.05) { pass++; log('PASS brick drag varies per seed (maxDiff ' + dm.toFixed(2) + ')'); } else { fail++; log('FAIL brick drag identical across seeds'); }
+    // spectral tilt: energy above 5 kHz must be well below energy in the 300–2000 Hz grind band
+    tiltRatio = buf => { const d = buf.getChannelData(0); const N = 2048; let lo = 0, hi = 0; const sr = buf.sampleRate; const frames = 10; const hop = Math.floor((d.length - N) / frames);
+      for (let fi = 0; fi < frames; fi++) { const f0 = fi * hop; for (let k = 1; k < N / 2; k += 2) { const fr = k * sr / N; if (!((fr >= 300 && fr <= 2000) || fr >= 5000)) continue; let re = 0, im = 0; for (let n = 0; n < N; n++) { const w = d[f0 + n] * (0.5 - 0.5 * Math.cos(2 * Math.PI * n / N)); const ph = -2 * Math.PI * k * n / N; re += w * Math.cos(ph); im += w * Math.sin(ph); } const pw = re * re + im * im; if (fr >= 5000) hi += pw; else lo += pw; } }
+      return hi / Math.max(1e-9, lo); };
+    // control: a bright broadband source must measure high, so the tilt check cannot pass trivially
+    { const ctrl = await Foley.Engine.render({ layers: [{ gen: 'static', params: Object.assign(Foley.defaultParams('static'), { type: 'tv', length: 1, bright: 0.8 }) }], fx: {}, seed: 1 }, 2); const r = tiltRatio(ctrl); if (r > 0.5) { pass++; log('PASS tilt control (TV static >5k / grind band = ' + r.toFixed(2) + ')'); } else { fail++; log('FAIL tilt control too low: ' + r.toFixed(3)); } }
+    { const g = await Foley.Engine.render({ layers: [{ gen: 'rock', params: Object.assign(Foley.defaultParams('rock'), { type: 'grind', object: 'stone', ground: 'rock', length: 1.5 }) }], fx: {}, seed: 1 }, 4); const r = tiltRatio(g); if (r < 0.5) { pass++; log('PASS stone grind is mid-heavy (>5k / grind band = ' + r.toFixed(3) + ')'); } else { fail++; log('FAIL stone grind too bright: ' + r.toFixed(3)); } }
+    { const ratio = tiltRatio(s1); if (ratio < 0.5) { pass++; log('PASS brick drag is mid-heavy (>5k / grind band = ' + ratio.toFixed(3) + ')'); } else { fail++; log('FAIL brick drag too bright: >5k / grind band = ' + ratio.toFixed(3)); } }
+  }
+  // 2f) metal / glass models, loudness normalization, distance, transient shaper, room presets, intensity macro
+  {
+    const M = Foley.Materials; const rng = new Foley.PRNG(99);
+    for (const fam of ['METAL', 'GLASS']) for (const kind of Object.keys(M[fam])) { const modes = M.genModes(M[fam][kind], 1, rng, 0.3); const byF = modes.slice().sort((a, b) => a.f - b.f); if (modes.length >= 5 && byF[byF.length - 1].decay < byF[0].decay * 1.01) pass++; else { fail++; log('FAIL ' + fam + ' modes ' + kind + ' n=' + modes.length); } }
+    log('PASS metal/glass mode tables (' + (Object.keys(M.METAL).length + Object.keys(M.GLASS).length) + ' kinds)');
+    for (const mat of ['metal', 'glass', 'stone']) await check('impact:' + mat, { layers: [{ gen: 'impact', params: Object.assign(Foley.defaultParams('impact'), { material: mat }) }], fx: {}, seed: 3 });
+    // loudness: two very different pads normalized to the same target must land within 1.5 LU of each other
+    const pads = [['uiclick', {}], ['drone', { length: 2 }], ['footstep', { surface: 'gravel' }]]; const Ls = [];
+    for (const [g, pr] of pads) { const b = await Foley.Engine.render({ layers: [{ gen: g, params: Object.assign(Foley.defaultParams(g), pr) }], fx: { normMode: 'loudness', loudTarget: -18 }, seed: 1 }, 5); Ls.push(Foley.Engine.loudness(b).lufs); }
+    const spread = Math.max(...Ls) - Math.min(...Ls);
+    if (spread < 1.5) { pass++; log('PASS loudness normalization: ' + Ls.map(x => x.toFixed(1)).join(' / ') + ' LU (spread ' + spread.toFixed(2) + ')'); } else { fail++; log('FAIL loudness normalization spread ' + spread.toFixed(2) + ' LU: ' + Ls.map(x => x.toFixed(1)).join(' / ')); }
+    const base = { layers: [{ gen: 'impact', params: Foley.defaultParams('impact') }], fx: {}, seed: 7 };
+    for (const t of Foley.Engine.REVERB_TYPES) await check('reverb:' + t, Object.assign({}, base, { fx: { reverb: 0.4, reverbType: t, reverbSize: 0.5 } }));
+    await check('fx:distance', Object.assign({}, base, { fx: { distance: 0.7 } })); await check('fx:transient', Object.assign({}, base, { fx: { transAttack: 0.8, transSustain: -0.5 } }));
+    { const near = await Foley.Engine.render(Object.assign({}, base, { fx: { distance: 0, normalize: false } }), 7), far = await Foley.Engine.render(Object.assign({}, base, { fx: { distance: 0.8, normalize: false } }), 7); const pk = b => { let p = 0; const d = b.getChannelData(0); for (let i = 0; i < d.length; i++) p = Math.max(p, Math.abs(d[i])); return p; }; if (pk(far) < pk(near) * 0.5 && tiltRatio(far) <= tiltRatio(near) + 1e-6) { pass++; log('PASS distance macro: quieter and darker'); } else { fail++; log('FAIL distance macro: peaks ' + pk(near).toFixed(3) + ' -> ' + pk(far).toFixed(3)); } }
+    { const soft = await Foley.Engine.render(Object.assign({}, base, { intensity: 0.1 }), 7), hard = await Foley.Engine.render(Object.assign({}, base, { intensity: 0.9 }), 7); let dm = 0; const x = soft.getChannelData(0), y = hard.getChannelData(0); for (let i = 0; i < Math.min(x.length, y.length); i++) dm = Math.max(dm, Math.abs(x[i] - y[i])); if (dm > 0.05) { pass++; log('PASS intensity macro changes the render'); } else { fail++; log('FAIL intensity macro has no effect'); } }
+    for (const nm of ['Step Gravel', 'Step Wood', 'Sword Clash', 'Glass Shatter', 'Rain Loop', 'Rain Heavy', 'Wind Soft', 'Fire Loop', 'Spider on Wood']) { const pd = Foley.Factory['Starter Kit'].find(p => p.name === nm); if (!pd) continue; const b = await Foley.Engine.render(Foley.Store.migratePad(JSON.parse(JSON.stringify(pd))), 12345); log('INFO tilt Starter ' + nm.padEnd(14) + tiltRatio(b).toFixed(3)); }
+  }
+  // 2g) OGG Vorbis export (lazy-loaded encoder) + friction creaks
+  {
+    Foley.Ogg.baseUrl = '../../../';
+    const b = await Foley.Engine.render({ layers: [{ gen: 'uitone', params: Foley.defaultParams('uitone') }], fx: {}, seed: 1 }, 1);
+    try { const t0 = performance.now(); const blob = await Foley.Ogg.encode(b, 0.4, { TITLE: 'selftest', LOOPSTART: '0' }); const head = new Uint8Array(await blob.slice(0, 4).arrayBuffer()); const magic = String.fromCharCode(...head); const wavBytes = b.length * b.numberOfChannels * 2;
+      if (magic === 'OggS' && blob.size > 500 && blob.size < wavBytes) { pass++; log('PASS ogg export: ' + blob.size + ' bytes (' + (100 * blob.size / wavBytes).toFixed(1) + '% of 16-bit WAV) in ' + (performance.now() - t0).toFixed(0) + 'ms'); } else { fail++; log('FAIL ogg export: magic=' + magic + ' size=' + blob.size); }
+      const mono = await Foley.Ogg.convert(b, 44100, 1); if (mono.sampleRate === 44100 && mono.numberOfChannels === 1 && Math.abs(mono.duration - b.duration) < 0.01) { pass++; log('PASS export conversion 44.1 kHz mono'); } else { fail++; log('FAIL export conversion'); }
+    } catch (e) { fail++; log('FAIL ogg export threw: ' + e.message); }
+    await check('creak:door', { layers: [{ gen: 'door', params: Object.assign(Foley.defaultParams('door'), { type: 'creak', length: 1.2 }) }], fx: {}, seed: 2 });
+    await check('creak:chain-hoist', { layers: [{ gen: 'chain', params: Object.assign(Foley.defaultParams('chain'), { type: 'hoist', wood: 1, length: 1.5 }) }], fx: {}, seed: 2 });
+    { const c = await Foley.Engine.render({ layers: [{ gen: 'door', params: Object.assign(Foley.defaultParams('door'), { type: 'creak', length: 1.2 }) }], fx: {}, seed: 2 }, 2); const r = tiltRatio(c); if (r < 0.3) { pass++; log('PASS door creak is woody, not synth-bright (tilt ' + r.toFixed(3) + ')'); } else { fail++; log('FAIL door creak bright: ' + r.toFixed(3)); } }
+  }
+  // 2h) layer repeat / solo / per-layer FX in the engine
+  {
+    const base = { layers: [{ gen: 'uiclick', params: Foley.defaultParams('uiclick'), repeat: 1 }, { gen: 'drone', params: Object.assign(Foley.defaultParams('drone'), { length: 1 }), mute: false }], fx: { normalize: false }, seed: 1 };
+    const one = await Foley.Engine.render({ layers: [base.layers[0]], fx: { normalize: false }, seed: 1 }, 1); const rep = await Foley.Engine.render({ layers: [Object.assign({}, base.layers[0], { repeat: 5, every: 0.2, jitter: 0.3 })], fx: { normalize: false }, seed: 1 }, 1);
+    if (rep.duration > one.duration + 0.5) { pass++; log('PASS layer repeat: ' + one.duration.toFixed(2) + 's -> ' + rep.duration.toFixed(2) + 's'); } else { fail++; log('FAIL layer repeat did not extend duration (' + one.duration.toFixed(2) + ' -> ' + rep.duration.toFixed(2) + ')'); }
+    // seamless loops: after the smart-seam crossfade, the seam region must not dip (periodic signals used to beat there)
+    for (const [nm, bank] of [['8-bit Engine', 'Starter Kit'], ['Radio Static', 'Starter Kit'], ['TV Static', 'Starter Kit'], ['Rain Loop', 'Starter Kit'], ['Fire Loop', 'Starter Kit'], ['Wind Soft', 'Starter Kit']]) {
+      const pd = Foley.Factory[bank].find(p => p.name === nm); if (!pd) continue; const pad = Foley.Store.migratePad(JSON.parse(JSON.stringify(pd))); pad.fx.loopFade = Math.max(pad.fx.loopFade || 0, 250);
+      const b = await Foley.Engine.render(pad, 12345); const d = b.getChannelData(0); const F = Math.floor(0.25 * b.sampleRate); const rms = (s, e) => { let a = 0; for (let i = s; i < e; i++) a += d[i] * d[i]; return Math.sqrt(a / Math.max(1, e - s)); };
+      const seam = rms(d.length - F, d.length), body = rms(Math.floor(d.length * 0.3), Math.floor(d.length * 0.7)); const ratio = seam / Math.max(1e-6, body);
+      if (ratio > 0.7 && ratio < 1.5) { pass++; log('PASS seamless loop ' + nm.padEnd(12) + 'seam/body level ' + ratio.toFixed(2)); }
+      else { fail++; let lastNZ = -1, firstNZ = -1; for (let i = 0; i < d.length; i++) if (Math.abs(d[i]) > 0.001) { if (firstNZ < 0) firstNZ = i; lastNZ = i; } const segs = []; for (let k = 0; k < 8; k++) segs.push(rms(Math.floor(d.length * k / 8), Math.floor(d.length * (k + 1) / 8)).toFixed(3)); log('FAIL loop seam dips/bumps for ' + nm + ': seam/body ' + ratio.toFixed(2) + ' len=' + d.length + ' firstNZ=' + firstNZ + ' lastNZ=' + lastNZ + ' segRMS=' + segs.join('/')); }
+    }
+    const solo = await Foley.Engine.render({ layers: [Object.assign({}, base.layers[0], { solo: true }), base.layers[1]], fx: { normalize: false }, seed: 1 }, 1);
+    const both = await Foley.Engine.render(base, 1);
+    if (solo.duration < both.duration - 0.3) { pass++; log('PASS layer solo drops the un-soloed drone (' + both.duration.toFixed(2) + 's -> ' + solo.duration.toFixed(2) + 's)'); } else { fail++; log('FAIL layer solo had no effect (' + both.duration.toFixed(2) + ' -> ' + solo.duration.toFixed(2) + ')'); }
+    const dark = await Foley.Engine.render({ layers: [Object.assign({}, base.layers[1], { lp: 300 })], fx: { normalize: false }, seed: 1 }, 1); const bright = await Foley.Engine.render({ layers: [base.layers[1]], fx: { normalize: false }, seed: 1 }, 1);
+    if (tiltRatio(dark) < tiltRatio(bright)) { pass++; log('PASS per-layer low-pass darkens (' + tiltRatio(dark).toFixed(4) + ' < ' + tiltRatio(bright).toFixed(4) + ')'); } else { fail++; log('FAIL per-layer low-pass had no effect'); }
+    await check('fx:rattle', { layers: [{ gen: 'impact', params: Object.assign(Foley.defaultParams('impact'), { material: 'cardboard' }) }], fx: { rattle: 0.8 }, seed: 2 });
+    { const plain = await Foley.Engine.render({ layers: [{ gen: 'impact', params: Object.assign(Foley.defaultParams('impact'), { material: 'cardboard' }) }], fx: { normalize: false }, seed: 2 }, 2), rat = await Foley.Engine.render({ layers: [{ gen: 'impact', params: Object.assign(Foley.defaultParams('impact'), { material: 'cardboard' }) }], fx: { normalize: false, rattle: 0.8 }, seed: 2 }, 2); let dm = 0; const x = plain.getChannelData(0), y = rat.getChannelData(0); for (let i = 0; i < Math.min(x.length, y.length); i++) dm = Math.max(dm, Math.abs(x[i] - y[i])); if (dm > 0.02) { pass++; log('PASS rattle FX adds chatter (maxDiff ' + dm.toFixed(3) + ')'); } else { fail++; log('FAIL rattle FX had no effect'); } }
+  }
+  // 3) all factory pads (+ golden fingerprint per pad: duration, loudness, brightness, spectral centroid, crest)
+  const fingerprint = b => {
+    const d = b.getChannelData(0); const sr = b.sampleRate; let peak = 0, sum = 0; for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); if (v > peak) peak = v; sum += v * v; }
+    const rms = Math.sqrt(sum / Math.max(1, d.length)); const N = 512; const frames = Math.min(12, Math.max(1, Math.floor(d.length / N))); const hop = Math.floor((d.length - N) / frames) || 0;
+    let num = 0, den = 0; for (let fi = 0; fi < frames; fi++) { const s0 = fi * hop; for (let k = 1; k < N / 2; k += 2) { let re = 0, im = 0; for (let n = 0; n < N; n++) { const w = d[s0 + n] * (0.5 - 0.5 * Math.cos(2 * Math.PI * n / N)); const ph = -2 * Math.PI * k * n / N; re += w * Math.cos(ph); im += w * Math.sin(ph); } const pw = re * re + im * im; num += pw * (k * sr / N); den += pw; } }
+    return { dur: +b.duration.toFixed(3), lufs: +Foley.Engine.loudness(b).lufs.toFixed(2), tilt: +tiltRatio(b).toFixed(4), centroid: +(den > 0 ? num / den : 0).toFixed(0), crest: +(peak / Math.max(1e-6, rms)).toFixed(2) };
+  };
+  const golden = {};
+  for (const bank in Foley.Factory) for (const p of Foley.Factory[bank]) { const pad = Foley.Store.migratePad(JSON.parse(JSON.stringify(p))); await check('pad:' + bank + '/' + p.name, pad); try { golden[bank + '/' + p.name] = fingerprint(await Foley.Engine.render(pad, 12345)); } catch (e) { } }
+  log('GOLDEN ' + JSON.stringify(golden));
+  // 4) determinism
+  const p = Foley.Store.migratePad({ layers: [{ gen: 'footstep', params: {} }] });
+  Foley.Engine.cache.clear(); const a = await Foley.Engine.render(p, 42); Foley.Engine.cache.clear(); const b = await Foley.Engine.render(p, 42);
+  let same = a.length === b.length, maxd = 0, nd = 0, first = -1; if (same) { const x = a.getChannelData(0), y = b.getChannelData(0); for (let i = 0; i < x.length; i++) { const d = Math.abs(x[i] - y[i]); if (d > 0) { nd++; if (first < 0) first = i; if (d > maxd) maxd = d; } } same = maxd < 1e-3; } // Chrome's renderer is not bit-exact (~1 ULP drift); require perceptual identity
+  if (same) { pass++; log('PASS determinism (maxDiff=' + maxd.toExponential(2) + ')'); } else { fail++; log('FAIL determinism len=' + a.length + '/' + b.length + ' diffSamples=' + nd + ' maxDiff=' + maxd + ' first=' + first); }
+  // different seed must actually differ
+  { Foley.Engine.cache.clear(); const c = await Foley.Engine.render(p, 43); let m = 0; const x = a.getChannelData(0), y = c.getChannelData(0); for (let i = 0; i < Math.min(x.length, y.length); i++) m = Math.max(m, Math.abs(x[i] - y[i])); if (a.length !== c.length || m > 0.05) { pass++; log('PASS seeds differ'); } else { fail++; log('FAIL seeds produce identical output'); } }
+  // 5) WAV encode
+  const wav = Foley.Engine.encodeWav(a); if (wav.size === 44 + a.length * 4) { pass++; log('PASS wav size ' + wav.size); } else { fail++; log('FAIL wav size ' + wav.size); }
+  } catch (e) { fail++; log('FAIL EXCEPTION: ' + (e && e.stack || e)); }
+  log('\nSUMMARY pass=' + pass + ' fail=' + fail + ' consoleErrors=' + errs.length);
+  errs.forEach(e => log('  ERR ' + e));
+  document.title = 'DONE pass=' + pass + ' fail=' + fail;
+})();
+</script>
+</body></html>

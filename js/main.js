@@ -136,14 +136,20 @@
   }, { threshold: 0.4 });
   videos.forEach(v => videoObs.observe(v));
 
+  // Clips without an audio track (game5) have no button
+  const showSound = (btn, on) => {
+    if (!btn) return;
+    btn.classList.toggle('on', on);
+    btn.textContent = on ? '\u{1F50A}' : '\u{1F508}';
+  };
   document.querySelectorAll('.sound-toggle').forEach(btn => {
     btn.addEventListener('click', () => {
       const v = btn.parentElement.querySelector('video');
       // mute every other video so only one plays sound at a time
-      videos.forEach(o => { if (o !== v) { o.muted = true; o.parentElement.querySelector('.sound-toggle').classList.remove('on'); } });
+      videos.forEach(o => { if (o !== v) { o.muted = true; showSound(o.parentElement.querySelector('.sound-toggle'), false); } });
       v.muted = !v.muted;
-      btn.classList.toggle('on', !v.muted);
-      btn.textContent = v.muted ? '\u{1F508}' : '\u{1F50A}';
+      showSound(btn, !v.muted);
+      if (!v.muted) v.play().catch(() => {});
     });
   });
 

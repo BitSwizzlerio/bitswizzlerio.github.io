@@ -1,0 +1,597 @@
+{
+ "Starter Kit/Step Gravel": {
+  "dur": 0.415,
+  "lufs": -18.03,
+  "tilt": 0.0088,
+  "centroid": 1544,
+  "crest": 8.44
+ },
+ "Starter Kit/Step Wood": {
+  "dur": 0.814,
+  "lufs": -18.62,
+  "tilt": 0.0001,
+  "centroid": 114,
+  "crest": 6.05
+ },
+ "Starter Kit/Jump": {
+  "dur": 0.23,
+  "lufs": -18,
+  "tilt": 0.0021,
+  "centroid": 483,
+  "crest": 2.74
+ },
+ "Starter Kit/Land": {
+  "dur": 0.61,
+  "lufs": -19.05,
+  "tilt": 0.0022,
+  "centroid": 185,
+  "crest": 7.12
+ },
+ "Starter Kit/Sword Clash": {
+  "dur": 1.41,
+  "lufs": -20.31,
+  "tilt": 0.0221,
+  "centroid": 545,
+  "crest": 8.95
+ },
+ "Starter Kit/Punch": {
+  "dur": 0.335,
+  "lufs": -18.26,
+  "tilt": 0.0006,
+  "centroid": 196,
+  "crest": 6.39
+ },
+ "Starter Kit/Explosion": {
+  "dur": 1.776,
+  "lufs": -18,
+  "tilt": 0.0734,
+  "centroid": 242,
+  "crest": 2.87
+ },
+ "Starter Kit/Pistol": {
+  "dur": 1.255,
+  "lufs": -18.59,
+  "tilt": 0.0259,
+  "centroid": 790,
+  "crest": 9.52
+ },
+ "Starter Kit/Laser Pew": {
+  "dur": 0.203,
+  "lufs": -18,
+  "tilt": 0.2016,
+  "centroid": 3230,
+  "crest": 8.3
+ },
+ "Starter Kit/Arrow Flyby": {
+  "dur": 0.43,
+  "lufs": -18,
+  "tilt": 0.0062,
+  "centroid": 2100,
+  "crest": 6.91
+ },
+ "Starter Kit/Coin": {
+  "dur": 0.46,
+  "lufs": -18,
+  "tilt": 0.0827,
+  "centroid": 1767,
+  "crest": 5.16
+ },
+ "Starter Kit/Power Up": {
+  "dur": 1.486,
+  "lufs": -18,
+  "tilt": 0.458,
+  "centroid": 2691,
+  "crest": 6.7
+ },
+ "Starter Kit/Magic Sparkle": {
+  "dur": 2.481,
+  "lufs": -18,
+  "tilt": 0.0023,
+  "centroid": 799,
+  "crest": 5.56
+ },
+ "Starter Kit/Glass Shatter": {
+  "dur": 1.306,
+  "lufs": -26.53,
+  "tilt": 0.1131,
+  "centroid": 683,
+  "crest": 15.17
+ },
+ "Starter Kit/Heartbeat": {
+  "dur": 2.651,
+  "lufs": -18.41,
+  "tilt": 0.0102,
+  "centroid": 95,
+  "crest": 5.73
+ },
+ "Starter Kit/UI Click": {
+  "dur": 0.136,
+  "lufs": -18.49,
+  "tilt": 3.2583,
+  "centroid": 4698,
+  "crest": 10.56
+ },
+ "Starter Kit/UI Confirm": {
+  "dur": 0.31,
+  "lufs": -18,
+  "tilt": 0,
+  "centroid": 736,
+  "crest": 4.55
+ },
+ "Starter Kit/UI Error": {
+  "dur": 0.286,
+  "lufs": -18,
+  "tilt": 0.0407,
+  "centroid": 523,
+  "crest": 5.14
+ },
+ "Starter Kit/Hover": {
+  "dur": 0.07,
+  "lufs": -18,
+  "tilt": 0,
+  "centroid": 952,
+  "crest": 5.02
+ },
+ "Starter Kit/Click Soft": {
+  "dur": 0.051,
+  "lufs": -18,
+  "tilt": 0.0004,
+  "centroid": 521,
+  "crest": 5.47
+ },
+ "Starter Kit/Click Crisp": {
+  "dur": 0.136,
+  "lufs": -18.49,
+  "tilt": 3.2583,
+  "centroid": 4698,
+  "crest": 10.56
+ },
+ "Starter Kit/Click Mech": {
+  "dur": 0.207,
+  "lufs": -18.59,
+  "tilt": 0.0012,
+  "centroid": 1356,
+  "crest": 9.32
+ },
+ "Starter Kit/Bubble": {
+  "dur": 0.097,
+  "lufs": -18,
+  "tilt": 0,
+  "centroid": 527,
+  "crest": 5.04
+ },
+ "Starter Kit/Confirm": {
+  "dur": 0.31,
+  "lufs": -18,
+  "tilt": 0,
+  "centroid": 736,
+  "crest": 4.55
+ },
+ "Starter Kit/Cancel": {
+  "dur": 0.309,
+  "lufs": -18,
+  "tilt": 0,
+  "centroid": 938,
+  "crest": 4.66
+ },
+ "Starter Kit/Error": {
+  "dur": 0.286,
+  "lufs": -18,
+  "tilt": 0.0407,
+  "centroid": 523,
+  "crest": 5.14
+ },
+ "Starter Kit/Notify": {
+  "dur": 1.306,
+  "lufs": -18,
+  "tilt": 0,
+  "centroid": 750,
+  "crest": 7.01
+ },
+ "Starter Kit/Popup": {
+  "dur": 0.43,
+  "lufs": -18,
+  "tilt": 0,
+  "centroid": 782,
+  "crest": 5.32
+ },
+ "Starter Kit/Swipe": {
+  "dur": 0.189,
+  "lufs": -18,
+  "tilt": 0.0169,
+  "centroid": 1620,
+  "crest": 3.87
+ },
+ "Starter Kit/Swipe Back": {
+  "dur": 0.189,
+  "lufs": -18,
+  "tilt": 0.1249,
+  "centroid": 2683,
+  "crest": 4.92
+ },
+ "Starter Kit/Typing": {
+  "dur": 0.648,
+  "lufs": -18.62,
+  "tilt": 0.1139,
+  "centroid": 1950,
+  "crest": 9.08
+ },
+ "Starter Kit/Typewriter": {
+  "dur": 1.81,
+  "lufs": -18.1,
+  "tilt": 0.0152,
+  "centroid": 1508,
+  "crest": 9.76
+ },
+ "Starter Kit/Lock": {
+  "dur": 1.694,
+  "lufs": -18.34,
+  "tilt": 0.0001,
+  "centroid": 1231,
+  "crest": 12.73
+ },
+ "Starter Kit/Switch": {
+  "dur": 0.226,
+  "lufs": -18.28,
+  "tilt": 0.0173,
+  "centroid": 1746,
+  "crest": 8.98
+ },
+ "Starter Kit/Level Up": {
+  "dur": 1.837,
+  "lufs": -18,
+  "tilt": 0.2232,
+  "centroid": 2601,
+  "crest": 5.66
+ },
+ "Starter Kit/Heal": {
+  "dur": 1.69,
+  "lufs": -18,
+  "tilt": 0.0659,
+  "centroid": 1891,
+  "crest": 7.33
+ },
+ "Starter Kit/8-bit Jump": {
+  "dur": 0.159,
+  "lufs": -9.6,
+  "tilt": 0.0215,
+  "centroid": 536,
+  "crest": 2.7
+ },
+ "Starter Kit/8-bit Coin": {
+  "dur": 0.352,
+  "lufs": -13.99,
+  "tilt": 0.1265,
+  "centroid": 2586,
+  "crest": 5.55
+ },
+ "Starter Kit/8-bit 1-Up": {
+  "dur": 0.608,
+  "lufs": -12.17,
+  "tilt": 0.376,
+  "centroid": 3101,
+  "crest": 5.59
+ },
+ "Starter Kit/8-bit Laser": {
+  "dur": 0.087,
+  "lufs": -14.04,
+  "tilt": 0.1411,
+  "centroid": 2579,
+  "crest": 5.74
+ },
+ "Starter Kit/8-bit Explode": {
+  "dur": 0.327,
+  "lufs": -13.53,
+  "tilt": 0.0715,
+  "centroid": 299,
+  "crest": 3.99
+ },
+ "Starter Kit/8-bit Hit": {
+  "dur": 0.09,
+  "lufs": -15.31,
+  "tilt": 0.0111,
+  "centroid": 785,
+  "crest": 5.27
+ },
+ "Starter Kit/8-bit Blip": {
+  "dur": 0.066,
+  "lufs": -14.59,
+  "tilt": 0.0574,
+  "centroid": 1395,
+  "crest": 5.44
+ },
+ "Starter Kit/8-bit Error": {
+  "dur": 0.161,
+  "lufs": -14.9,
+  "tilt": 0.047,
+  "centroid": 561,
+  "crest": 5.03
+ },
+ "Starter Kit/8-bit Power Up": {
+  "dur": 0.593,
+  "lufs": -11.99,
+  "tilt": 0.1496,
+  "centroid": 2479,
+  "crest": 5.36
+ },
+ "Starter Kit/8-bit Alarm": {
+  "dur": 1.219,
+  "lufs": -3.85,
+  "tilt": 0.0548,
+  "centroid": 2017,
+  "crest": 1.7
+ },
+ "Starter Kit/8-bit Engine": {
+  "dur": 2.107,
+  "lufs": -7.84,
+  "tilt": 0.0154,
+  "centroid": 225,
+  "crest": 1.94
+ },
+ "Starter Kit/8-bit Text": {
+  "dur": 0.46,
+  "lufs": -14.5,
+  "tilt": 0.1195,
+  "centroid": 2756,
+  "crest": 6.33
+ },
+ "Starter Kit/Chain Hoist": {
+  "dur": 3.506,
+  "lufs": -18.47,
+  "tilt": 0.0031,
+  "centroid": 671,
+  "crest": 8.44
+ },
+ "Starter Kit/Chain Lower": {
+  "dur": 3.598,
+  "lufs": -18.16,
+  "tilt": 0.0044,
+  "centroid": 219,
+  "crest": 7.56
+ },
+ "Starter Kit/Drawbridge Lower": {
+  "dur": 6.177,
+  "lufs": -21.2,
+  "tilt": 0.001,
+  "centroid": 208,
+  "crest": 10.18
+ },
+ "Starter Kit/Drawbridge Raise": {
+  "dur": 6.33,
+  "lufs": -18.03,
+  "tilt": 0.0021,
+  "centroid": 197,
+  "crest": 7.2
+ },
+ "Starter Kit/Door Slam": {
+  "dur": 1.33,
+  "lufs": -20.98,
+  "tilt": 0,
+  "centroid": 115,
+  "crest": 8.34
+ },
+ "Starter Kit/Door Creak": {
+  "dur": 2.4,
+  "lufs": -18,
+  "tilt": 0,
+  "centroid": 123,
+  "crest": 3.59
+ },
+ "Starter Kit/Spider on Wood": {
+  "dur": 2.044,
+  "lufs": -18.13,
+  "tilt": 0.8561,
+  "centroid": 2694,
+  "crest": 11.71
+ },
+ "Starter Kit/Insect Swarm": {
+  "dur": 4.008,
+  "lufs": -18.02,
+  "tilt": 0.0003,
+  "centroid": 539,
+  "crest": 6.98
+ },
+ "Starter Kit/Birds": {
+  "dur": 1.856,
+  "lufs": -18,
+  "tilt": 36.4191,
+  "centroid": 3021,
+  "crest": 5.77
+ },
+ "Starter Kit/Owl": {
+  "dur": 2.269,
+  "lufs": -18,
+  "tilt": 0,
+  "centroid": 297,
+  "crest": 5.08
+ },
+ "Starter Kit/Goblin Chuckle": {
+  "dur": 1.621,
+  "lufs": -18.12,
+  "tilt": 0.0088,
+  "centroid": 2869,
+  "crest": 8.57
+ },
+ "Starter Kit/Cute Sneeze": {
+  "dur": 1.265,
+  "lufs": -18,
+  "tilt": 0.0063,
+  "centroid": 763,
+  "crest": 4.91
+ },
+ "Starter Kit/Snore": {
+  "dur": 6.558,
+  "lufs": -18,
+  "tilt": 0.0359,
+  "centroid": 1409,
+  "crest": 7.94
+ },
+ "Starter Kit/Stone Scrape": {
+  "dur": 2.241,
+  "lufs": -18,
+  "tilt": 0,
+  "centroid": 259,
+  "crest": 5.38
+ },
+ "Starter Kit/Rain Loop": {
+  "dur": 4.02,
+  "lufs": -18,
+  "tilt": 0.0466,
+  "centroid": 2676,
+  "crest": 7.08
+ },
+ "Starter Kit/Rain Heavy": {
+  "dur": 4.7,
+  "lufs": -18,
+  "tilt": 0.0076,
+  "centroid": 1824,
+  "crest": 5.74
+ },
+ "Starter Kit/Wind Soft": {
+  "dur": 5.585,
+  "lufs": -18,
+  "tilt": 0.0077,
+  "centroid": 761,
+  "crest": 5.39
+ },
+ "Starter Kit/Fire Loop": {
+  "dur": 4.117,
+  "lufs": -18,
+  "tilt": 0.0396,
+  "centroid": 496,
+  "crest": 5.21
+ },
+ "Starter Kit/Thunder": {
+  "dur": 2.758,
+  "lufs": -18.06,
+  "tilt": 0.1039,
+  "centroid": 368,
+  "crest": 6.22
+ },
+ "Starter Kit/Splash": {
+  "dur": 0.863,
+  "lufs": -18,
+  "tilt": 0.0037,
+  "centroid": 1304,
+  "crest": 7.62
+ },
+ "Starter Kit/Radio Static": {
+  "dur": 2.691,
+  "lufs": -18,
+  "tilt": 2.8341,
+  "centroid": 5158,
+  "crest": 5.36
+ },
+ "Starter Kit/TV Static": {
+  "dur": 2.7,
+  "lufs": -18,
+  "tilt": 617.5279,
+  "centroid": 12628,
+  "crest": 3.77
+ },
+ "Starter Kit/Geiger": {
+  "dur": 1.998,
+  "lufs": -18.35,
+  "tilt": 24.4327,
+  "centroid": 4626,
+  "crest": 11.64
+ },
+ "Starter Kit/Digital Glitch": {
+  "dur": 2.028,
+  "lufs": -18,
+  "tilt": 0.0485,
+  "centroid": 1521,
+  "crest": 7.5
+ },
+ "Starter Kit/Glass Shimmer": {
+  "dur": 6.865,
+  "lufs": -18.04,
+  "tilt": 0.0012,
+  "centroid": 1430,
+  "crest": 10.49
+ },
+ "Starter Kit/Bell Jiggle": {
+  "dur": 0.756,
+  "lufs": -26.76,
+  "tilt": 0.0813,
+  "centroid": 2422,
+  "crest": 23.9
+ },
+ "Starter Kit/Bone Rattle": {
+  "dur": 1.813,
+  "lufs": -18,
+  "tilt": 0,
+  "centroid": 276,
+  "crest": 6.71
+ },
+ "Starter Kit/Skeleton Walk": {
+  "dur": 2.861,
+  "lufs": -18.72,
+  "tilt": 0,
+  "centroid": 512,
+  "crest": 9.25
+ },
+ "Starter Kit/Ghoul Groan": {
+  "dur": 4.11,
+  "lufs": -19,
+  "tilt": 0.0007,
+  "centroid": 388,
+  "crest": 5.75
+ },
+ "Starter Kit/Death Rattle": {
+  "dur": 3.193,
+  "lufs": -20,
+  "tilt": 0.0013,
+  "centroid": 400,
+  "crest": 8.36
+ },
+ "Starter Kit/Crate Smash": {
+  "dur": 2.574,
+  "lufs": -18.57,
+  "tilt": 0.002,
+  "centroid": 357,
+  "crest": 11.55
+ },
+ "Starter Kit/Coin Pouch": {
+  "dur": 1.107,
+  "lufs": -18.18,
+  "tilt": 0.0002,
+  "centroid": 436,
+  "crest": 7.28
+ },
+ "Starter Kit/Treasure Spill": {
+  "dur": 1.815,
+  "lufs": -18.01,
+  "tilt": 0.0003,
+  "centroid": 978,
+  "crest": 7.51
+ },
+ "Starter Kit/Armor Walk": {
+  "dur": 2.214,
+  "lufs": -18.48,
+  "tilt": 0.0727,
+  "centroid": 212,
+  "crest": 8.09
+ },
+ "Starter Kit/Potion Glug": {
+  "dur": 2.269,
+  "lufs": -18.01,
+  "tilt": 0.0009,
+  "centroid": 128,
+  "crest": 9.48
+ },
+ "Starter Kit/Bite Crunch": {
+  "dur": 0.236,
+  "lufs": -18.01,
+  "tilt": 0.1748,
+  "centroid": 494,
+  "crest": 6.38
+ },
+ "Starter Kit/War Horn": {
+  "dur": 3.03,
+  "lufs": -17,
+  "tilt": 0.0128,
+  "centroid": 394,
+  "crest": 2.53
+ }
+}

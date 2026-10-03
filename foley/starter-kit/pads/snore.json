@@ -1,0 +1,80 @@
+{
+  "format": "foley-bank",
+  "version": 1,
+  "bankName": "Snore",
+  "pads": [
+    {
+      "id": "pmteus6useb",
+      "name": "Snore",
+      "icon": "😴",
+      "color": "#9b6fe0",
+      "key": "",
+      "layers": [
+        {
+          "id": "pmteus6used",
+          "gain": 0,
+          "pan": 0,
+          "offset": 0,
+          "mute": false,
+          "open": true,
+          "gen": "yawn",
+          "params": {
+            "type": "snore",
+            "length": 1.8,
+            "pitch": 0.5,
+            "breath": 0.5,
+            "size": 1,
+            "count": 3
+          }
+        }
+      ],
+      "fx": {
+        "pitch": 0,
+        "hp": 20,
+        "lp": 20000,
+        "drive": 0,
+        "driveType": "soft",
+        "bits": 16,
+        "downsample": 1,
+        "body": "none",
+        "bodyAmount": 0.3,
+        "bodySize": 1.2,
+        "bodyDamp": 0.3,
+        "space": 0,
+        "spaceSize": 0.3,
+        "distance": 0,
+        "transAttack": 0,
+        "transSustain": 0,
+        "rattle": 0,
+        "rattleHz": 2200,
+        "rattleThreshold": 0.35,
+        "reverb": 0,
+        "reverbType": "hall",
+        "reverbSize": 0.5,
+        "reverbDamp": 0.5,
+        "delay": 0,
+        "delayTime": 0.18,
+        "delayFeedback": 0.35,
+        "reverse": false,
+        "normalize": true,
+        "normMode": "loudness",
+        "loudTarget": -18,
+        "fadeOut": 0.005,
+        "gain": 0,
+        "loopFade": 0
+      },
+      "seed": 436738,
+      "variations": 3,
+      "roundRobin": false,
+      "loop": false,
+      "intensity": 0.5,
+      "humanize": {
+        "pitch": 0.5,
+        "gain": 1.5,
+        "pan": 0
+      },
+      "pan": 0,
+      "tags": ""
+    }
+  ]
+}

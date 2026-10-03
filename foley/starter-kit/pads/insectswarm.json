@@ -1,0 +1,93 @@
+{
+  "format": "foley-bank",
+  "version": 1,
+  "bankName": "Insect Swarm",
+  "pads": [
+    {
+      "id": "pmtev91e4i7",
+      "name": "Insect Swarm",
+      "icon": "🐝",
+      "color": "#6fcf6f",
+      "key": "",
+      "layers": [
+        {
+          "id": "pmtev91e4i9",
+          "gain": 0,
+          "pan": 0,
+          "offset": 0,
+          "mute": false,
+          "open": true,
+          "gen": "granular",
+          "params": {
+            "source": "saw",
+            "length": 4,
+            "density": 400,
+            "grain": 40,
+            "grainVar": 0.6,
+            "shape": "hann",
+            "pitch": 180,
+            "spread": 7,
+            "rateJitter": 0.3,
+            "pan": 1,
+            "ampVar": 0.6,
+            "cloud": "gusts",
+            "pulseRate": 1.2,
+            "filter": "lowpass",
+            "cutoff": 2200,
+            "sweep": 0,
+            "reso": 2,
+            "drive": 0,
+            "loop": true
+          }
+        }
+      ],
+      "fx": {
+        "pitch": 0,
+        "hp": 20,
+        "lp": 20000,
+        "drive": 0,
+        "driveType": "soft",
+        "bits": 16,
+        "downsample": 1,
+        "body": "none",
+        "bodyAmount": 0.6,
+        "bodySize": 1,
+        "bodyDamp": 0.3,
+        "space": 0,
+        "spaceSize": 0.3,
+        "distance": 0,
+        "transAttack": 0,
+        "transSustain": 0,
+        "rattle": 0,
+        "rattleHz": 2200,
+        "rattleThreshold": 0.35,
+        "reverb": 0,
+        "reverbType": "hall",
+        "reverbSize": 0.5,
+        "reverbDamp": 0.5,
+        "delay": 0,
+        "delayTime": 0.18,
+        "delayFeedback": 0.35,
+        "reverse": false,
+        "normalize": true,
+        "normMode": "loudness",
+        "loudTarget": -18,
+        "fadeOut": 0.005,
+        "gain": 0,
+        "loopFade": 0
+      },
+      "seed": 462860,
+      "variations": 2,
+      "roundRobin": false,
+      "loop": true,
+      "intensity": 0.5,
+      "humanize": {
+        "pitch": 0,
+        "gain": 0,
+        "pan": 0
+      },
+      "pan": 0,
+      "tags": ""
+    }
+  ]
+}

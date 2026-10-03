@@ -1,15 +1,15 @@
-# Build CollisionLab (a LÖVE 11.x project) for the web and drop it into the site.
-#   Source : D:\Coding_Expirements\collisionlab   (the LÖVE project you develop in)
-#   Target : <website>\collisionlab              (published at bitswizzler.io/collisionlab/)
+# Build CollisionLab (a LÖVE 11.x project) for the web.
+#   Source : <website>\collisionlab\src   (the Lua -- edit it here, this repo owns it)
+#   Target : <website>\collisionlab       (published at bitswizzler.io/collisionlab/)
 # Steps: zip the *.lua tree into a .love -> run love.js (LÖVE compiled to WebAssembly, "compat"
 # build so it works on plain static hosting) -> copy the runtime (love.wasm, love.js, game.js,
-# game.data) into the target. The wrapper page <website>\collisionlab\index.html is hand-written
-# and never overwritten; only the four runtime files are replaced.
+# game.data) into the target. The wrapper page collisionlab\index.html is hand-written and never
+# overwritten; only the four runtime files are replaced.
 # Requires Node.js. love.js is installed on first run into tools\node_modules.
-# Usage:  powershell -ExecutionPolicy Bypass -File tools\sync-collisionlab.ps1 [-Source <path>]
+# Usage:  powershell -ExecutionPolicy Bypass -File tools\build-collisionlab.ps1
 
 param(
-  [string]$Source = "D:\Coding_Expirements\collisionlab",
+  [string]$Source = "",
   [string]$Title = "CollisionLab"
 )
 $ErrorActionPreference = 'Stop'
@@ -17,6 +17,7 @@ $Tools  = $PSScriptRoot
 $Site   = Split-Path $Tools -Parent
 $Target = Join-Path $Site 'collisionlab'
 $Build  = Join-Path $Tools 'build\collisionlab'
+if (-not $Source) { $Source = Join-Path $Target 'src' }
 
 if (-not (Test-Path (Join-Path $Source 'main.lua'))) { throw "No main.lua in $Source" }
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) { throw "Node.js is required (node not found on PATH)" }
@@ -63,4 +64,4 @@ if (-not (Test-Path (Join-Path $Target 'index.html'))) {
 }
 
 $size = [math]::Round((Get-ChildItem $Target -File | Measure-Object Length -Sum).Sum / 1MB, 2)
-Write-Host "Synced CollisionLab -> $Target  ($size MB; love.wasm is most of it)"
+Write-Host "Built CollisionLab -> $Target  ($size MB; love.wasm is most of it)"

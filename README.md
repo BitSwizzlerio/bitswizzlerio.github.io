@@ -1,102 +1,89 @@
 # BitSwizzler.io — studio site
 
-Static site: no build step. **Serve it over HTTP** — double-click `serve.bat` (or run `python -m http.server 8000`) and open <http://localhost:8000>.
+Static site: no build step for the pages themselves. **Serve it over HTTP** — double-click `serve.bat` (or run `py -m http.server 8000`) and open <http://localhost:8000>.
 
-> Opening `index.html` directly from disk (`file://`) works for everything *except* the 3D models: browsers block `fetch()` on local files, so `<model-viewer>` can't load the `.glb`s. The viewers show a notice instead. Once the site is on bitswizzler.io this is a non-issue.
+> Opening `index.html` directly from disk (`file://`) works for everything *except* the 3D models and CollisionLab: browsers block `fetch()` on local files, so `<model-viewer>` can't load the `.glb`s and love.js can't load its runtime. On bitswizzler.io this is a non-issue.
+
+Live on GitHub Pages from this repo; `.gitignore` keeps asset masters out, so pushing is the whole deploy.
 
 ## Structure
 
 ```
-index.html          landing page: hero, five games, showcase teaser
+index.html          landing page: hero carousel, five games, showcase teaser
 showcase.html       showcase page: 3D models, drawings, digital art
 css/style.css       theme, angled sections, reveals, carousel, galleries, lightbox
-js/main.js          carousel, scroll reveals, video autoplay, model-viewer progress, lightbox
-foley/              Foley Fun — procedural SFX lab, synced from D:\Coding_Expirements\foley (see below)
-collisionlab/       CollisionLab — LÖVE project compiled to WebAssembly with love.js (see below)
-serve.bat           local preview server (needed for the 3D models)
-assets/images/      image_01–06.png → hero carousel key art (2560×1200)
-assets/videos/      game1–5.mp4   → gameplay clips (placeholders, 10 s each)
-assets/models/      *.glb → 3D models; *_web.glb are the decimated + Draco copies the pages load
-assets/drawings/    charcoal & pencil photos/scans → Drawings gallery
-assets/digital/     digital paintings → Digital gallery
+js/main.js          carousel, scroll reveals, video autoplay, model-viewer, lightbox, masonry
+foley/              Foley Fun — procedural SFX board (plain JS, edit in place; see below)
+collisionlab/       CollisionLab — LÖVE lab compiled to WebAssembly; Lua source in collisionlab/src
+assets/images/      image_01–08_web.webp → hero carousel (the .png beside them are the masters)
+assets/videos/      game1–5.mp4 → 18 s 720p loops (gameN_full.mp4 are the untrimmed masters)
+assets/models/      *_web.glb → the models the pages load (the plain .glb are the masters)
+assets/drawings/    charcoal, pencil and ink photos/scans → Drawings gallery
+assets/digital/     digital paintings, sculpture, vector → Digital gallery
+tools/              build scripts (Blender model pipeline, CollisionLab web build, deploy staging)
+serve.bat           local preview server
 ```
 
-## Swapping placeholders
+## Swapping content
 
-- **Hero slides** – replace `assets/images/image_NN.png` and update the `background-image` URLs in the `.carousel` block of `index.html`. Add/remove `.slide` divs freely; dots are generated automatically. Change `data-interval` on `.carousel` for slide timing.
-- **Videos** – overwrite `assets/videos/gameN.mp4` (keep ≤ 20 s, H.264, no audio needed). Each `<video>` has a `poster` attribute pointing at the matching slide image.
-- **Text** – every heading, tagline, paragraph and tag list is inline in `index.html`.
-- **Showcase galleries** – each piece is a `<figure>` in `showcase.html`. Set the `<a href>` to the full-size image (opens in the lightbox), the `<img src>` to the same or a smaller thumbnail, and `data-title` / `data-medium` for the caption. Add or remove figures freely; the masonry layout reflows and keeps each image's own aspect ratio. Keep files under ~500 KB for the grid (e.g. `Escher_web.jpg` is a 1600 px copy of the 2.2 MB scan).
-- **Store links** – search for `store.steampowered.com` and `itch.io` and replace with your real store URLs.
+- **Hero slides** – add a 2560×1200 PNG to `assets/images/`, convert it to a 1920 px WebP (`magick image_09.png -resize 1920x -strip -quality 82 image_09_web.webp`), and add a `.slide` div pointing at the WebP in the `.carousel` block of `index.html`. Dots are generated automatically.
+- **Videos** – keep **H.264 High/Main, yuv420p, faststart**, ≤ 20 s. In Kdenlive use the stock **MP4-H264/AAC** preset (Generic group), not the Hardware Accelerated ones — those produced a 4:4:4 file browsers refuse to play. Keep the long capture as `gameN_full.mp4` and trim with `ffmpeg -ss <start> -i gameN_full.mp4 -t 18 -vf scale=1280:720 -c:v libx264 -profile:v high -pix_fmt yuv420p -crf 23 -preset slow -af "loudnorm=I=-18:TP=-1.5:LRA=11,aresample=48000,alimiter=limit=0.79:level=false,afade=t=in:d=0.25,afade=t=out:st=17.5:d=0.5" -c:a aac -b:a 128k -ac 2 -movflags +faststart gameN.mp4`. The audio filters even out loudness between games and fade the ends so the loop doesn't click. Current starts: game1 6 s, game2 6 s, game3 4 s, game4 8 s. `game5.mp4` is a generated placeholder with no audio, so its section has no sound button; when a real clip replaces it, copy the `<button class="sound-toggle">` from another section back in.
+- **Text** – every heading, tagline, paragraph and tag list is inline in `index.html` / `showcase.html`.
+- **Showcase galleries** – each piece is a `<figure>` in `showcase.html`: `<a href>` = full-size image (opens in the lightbox), `<img src>` = same or a thumbnail with its real `width`/`height`, and `data-title` / `data-medium` for the caption. Keep files under ~500 KB (e.g. `Escher_web.jpg` is a 1600 px copy of the 2.2 MB scan).
+- **Store buttons** – a live link is `<a class="btn btn-steam" href="…">`. For a game that isn't there yet, drop the `href` and add `soon` plus `data-soon="Q2 2027"` (or `TBD`, `Not on Steam`, `In Development`…) to stamp the tape on it.
+- **Browser caching** – replaced files keep their URLs, so hard-refresh (`Ctrl+Shift+R`) before deciding something didn't update. When you edit `css/style.css` or `js/main.js`, bump the `?v=` on their tags in **both** pages: a browser that pairs new HTML with a stale cached `main.js` can break outright (it did once — every sound button stopped working).
 
 ## 3D models
 
-The three showcase viewers use Google's [`<model-viewer>`](https://modelviewer.dev/) web component (loaded from a CDN in `<head>`) with **glTF binary (`.glb`)** files in `assets/models/`. The included bucket, teddy and robot are generated test models with full PBR texture sets (base colour, metallic/roughness, normal).
+The showcase viewers use Google's [`<model-viewer>`](https://modelviewer.dev/) (loaded from jsDelivr in `<head>`) with Draco-compressed **`.glb`** files. Only the Joule viewers carry the **Wire** button (a wireframe overlay); `js/main.js` reaches into model-viewer's internal three.js scene for it, which works with the pinned model-viewer 4.0.0 — re-check it if you ever bump the version.
 
-To swap in your own: export from Blender (File → Export → glTF 2.0, format *glTF Binary*) or any DCC that writes glTF, drop the `.glb` in `assets/models/`, and change the `src` on the matching `<model-viewer>` in `index.html`. Useful attributes already set on each viewer: `camera-controls`, `auto-rotate`, `environment-image="neutral"`, `shadow-intensity`, `exposure`. See the model-viewer docs for camera framing (`camera-orbit`, `camera-target`) and custom HDR lighting (`environment-image="path.hdr"`).
-
-Keep models under ~5 MB and ~200 k triangles each; textures at 1K–2K are plenty at this display size.
-
-Each viewer has a **Wire** button (top-right, off by default) that overlays a yellow wireframe. `<model-viewer>` has no wireframe option, so `js/main.js` reaches into its internal three.js scene via a symbol-keyed property — this works with the pinned model-viewer 4.0.0; if you ever bump the version, check the button still works (it hides itself if the hook is missing).
-
-Vertex-colour builds: `tools/grogg_ao.py` (toad skin + AO) and `tools/skull_ao.py` are the templates — copy one and change the palette block for new sculpts.
-
-**Heavy sculpts** (`Monster.glb`, `TheEvidence.glb` are 0.9–1.7 M tris) won't run well in a browser, so the pages load decimated, Draco-compressed copies (`*_web.glb`, ~150 k tris, well under 1 MB). Each has its own build script in `tools/` — rerun after re-exporting a source model (`BLENDER` = `"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup --python`):
+Heavy sculpts won't run well in a browser, so the pages load decimated, Draco-compressed copies (`*_web.glb`, ~150 k tris, well under 1 MB). Each has a build script in `tools/` — rerun after re-exporting a master (`BLENDER` = `"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup --python`; `--factory-startup` is required, the V-Ray add-on aborts headless Blender otherwise):
 
 ```
-BLENDER tools/monster_fix.py -- assets/models 150000     # weld verts, fix normals, decimate, double-sided
-BLENDER tools/skull_ao.py    -- assets/models 150000     # decimate, bake AO into bone-tinted vertex colour
-BLENDER tools/joule_web.py   -- assets/models 2048       # textures capped at 2K, WebP, Draco (14 MB -> 1.7 MB)
-BLENDER tools/robot_steel.py -- assets/models 200000     # join+weld, decimate, steel PBR + baked AO vertex colour, Draco
+BLENDER tools/monster_fix.py  -- assets/models 150000   # weld verts, fix normals, decimate, double-sided
+BLENDER tools/skull_ao.py     -- assets/models 150000   # decimate, bake AO into bone-tinted vertex colour
+BLENDER tools/grogg_ao.py     -- assets/models 150000   # decimate, toad-skin tint + baked AO
+BLENDER tools/robot_steel.py  -- assets/models 200000   # join+weld, decimate, steel PBR + baked AO
+BLENDER tools/joule_web.py    -- assets/models 2048     # textures capped at 2K, WebP, Draco
 BLENDER tools/optimize_models.py -- assets/models 150000 Name1 Name2   # generic: decimate + Draco only
 ```
 
-`150000` is the target triangle count. Two gotchas learned the hard way: meshes exported as unwelded triangle soup must be welded (`remove_doubles`) *before* decimating or Decimate deletes faces instead of collapsing edges; and vertex colours are linear in glTF, so pick colours in sRGB and convert (see `skull_ao.py`). Draco decoding needs a decoder library — both pages point `model-viewer` at the copy on jsDelivr in `<head>`.
+Two gotchas learned the hard way: meshes exported as unwelded triangle soup must be welded (`remove_doubles`) *before* decimating, or Decimate deletes faces instead of collapsing edges; and vertex colours are linear in glTF, so pick colours in sRGB and convert (see `skull_ao.py`).
+
+`Grogg.glb` and `Monster.glb` have no Blender source anywhere on the drive — they are the only masters, keep them. `tools/make_models.py` is the original placeholder generator and **writes `assets/models/robot.glb`**, which is now the real robot master — don't run it.
 
 ## Tweaking the look
 
 Colours, fonts and the diagonal cut size (`--angle`) are CSS custom properties at the top of `css/style.css`. Each section's `data-dir="left|right"` sets which way its diagonal leans.
 
-## Regenerating the test models
+## The labs
 
-`tools/make_models.py` builds the bucket, teddy and robot procedurally in Blender (geometry + noise-based PBR textures) and exports GLB. Run it headless:
+Both labs live in this repo and are edited here. They're deliberately low-key: no nav entry, just the muted **Lab:** line in both footers, and each page carries `noindex`.
 
-```
-"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup --python tools/make_models.py -- assets/models tools/tex
-```
+### Foley Fun (`/foley/`)
 
-Append `bucket`, `teddy` or `robot` to rebuild just one. `--factory-startup` is required — the V-Ray add-on aborts headless Blender otherwise.
+Plain HTML/CSS/JS with no build step — edit the files in `foley/` directly. When you change any JS or CSS, bump the `?v=` cache-buster on every tag in `foley/index.html` so visitors don't get a stale mix. `foley/README.md` documents the app itself; `foley/starter-kit/` (the factory pads as JSON) and `foley/archive/dev/` (rebuild tool and regression tests) are its development sources.
 
-## Foley Fun (`/foley/`)
+Mobile: on screens under 900 px wide (or under 500 px tall) the toolbar folds behind **☰**, the pad grid tightens, and the inspector sits under the board (portrait) or beside it (landscape). On touch, a tap plays a pad and a long-press opens its menu; a swipe that turns into a scroll never plays anything.
 
-The procedural sound-effect board lives at `bitswizzler.io/foley/`. It is deliberately low-key: no nav entry, just a muted **Lab: Foley Fun** link in both footers, and its page carries `noindex`. Inside Foley, a small **◀ BitSwizzler.io** link is prepended to its top bar by `foley/site-link.js`.
+### CollisionLab (`/collisionlab/`)
 
-The source project stays in `D:\Coding_Expirements\foley`. After changing it, resync:
+A LÖVE 11.x program running in the browser through [love.js](https://github.com/Davidobot/love.js). The Lua lives in **`collisionlab/src`**; after changing it, rebuild the web runtime:
 
 ```
-powershell -ExecutionPolicy Bypass -File tools\sync-foley.ps1
+powershell -ExecutionPolicy Bypass -File tools\build-collisionlab.ps1
 ```
 
-The script mirrors `index.html`, `css/`, `js/`, `vendor/` (skipping `archive/`, `starter-kit/` JSON and the README), then re-applies the `noindex` meta and the `site-link.js` script tag to the copied `index.html`. `foley/site-link.js` itself is never overwritten.
+The script zips `collisionlab/src` into a `.love`, runs love.js in *compatibility* mode (works on any static host, no special headers) and copies the runtime (`love.wasm`, `love.js`, `game.js`, `game.data`) into `collisionlab/`. The wrapper `collisionlab/index.html` is hand-written and never overwritten. Needs Node.js; love.js installs itself into `tools\node_modules` on first run. To try a change on the desktop first, run `love collisionlab/src`.
 
-## CollisionLab (`/collisionlab/`)
+How it adapts to phones:
 
-A LÖVE 11.x desktop project (`D:\Coding_Expirements\collisionlab`) running in the browser through
-[love.js](https://github.com/Davidobot/love.js) (LÖVE compiled to WebAssembly). Linked from the same muted footer
-**Lab:** line as Foley Fun; the page is `noindex`.
+- `conf.lua` makes the window **resizable from creation**. In the browser that is what makes the canvas render at the size of its CSS box (and follow it on rotation) — otherwise love.js renders a fixed 1280×780 and the browser shrinks it to unreadable on a phone.
+- `shared/shell.lua` lays the screen out: the original desktop layout at 1000×600 and up; below that, world beside a narrower panel (landscape) or world above the panel (portrait). The narrowphase world view fits the shapes into small views with a camera transform; on desktop at 1280+ it is the identity, so shapes sit exactly where they always have.
+- On touch screens (the wrapper passes `--touch`; any touch also switches it on) and on any compact screen, the panel opens with a **toolbar** whose buttons press the same keys as the keyboard shortcuts. One finger drags, two fingers **twist** to rotate (narrowphase) or **pinch** to change the cell size (broadphase), and dragging scrolls the info panel and the field notes.
 
-Rebuild after changing the Lua:
+Gotchas: `Esc` calls `love.event.quit()`, which ends the WASM app — the wrapper offers **Restart**. Fullscreen goes through LÖVE (`F11` → `love.window.setFullscreen`); the wrapper's button sends F11 and is hidden where the browser can't fullscreen a canvas (iPhone). Hosting must serve `.wasm` as `application/wasm` (GitHub Pages does).
 
-```
-powershell -ExecutionPolicy Bypass -File tools\sync-collisionlab.ps1
-```
+## Deploying elsewhere
 
-The script zips the `*.lua` tree into `tools\build\collisionlab\game.love`, runs love.js in *compatibility* mode
-(no SharedArrayBuffer, so it works on any static host — no special headers), and copies just the runtime
-(`love.wasm` 4.7 MB, `love.js`, `game.js`, `game.data`) into `collisionlab/`. The wrapper page
-`collisionlab/index.html` is hand-written (BitSwizzler styling, back-link, loading state, key legend) and is never
-overwritten. Needs Node.js; love.js installs itself into `tools\node_modules` on the first run (`tools\package.json`).
-
-Gotchas: `Esc` calls `love.event.quit()` in `main.lua`, which ends the WASM app — the page offers a **Restart** button.
-The wrapper also `preventDefault()`s F1/F2/space/arrows so the browser doesn't intercept them. Fullscreen is done *inside* LÖVE (`F11` → `love.window.setFullscreen` in `main.lua`); the wrapper's button just sends an F11 key event. Driving fullscreen from the DOM or `Module.requestFullscreen` leaves LÖVE with a stale viewport (black/grey screen). Hosting must serve
-`.wasm` as `application/wasm` (Python's server, GitHub Pages, Netlify, Cloudflare all do).
+`tools\build-deploy.ps1` stages exactly what the site serves into `dist\` (masters, lab sources and tooling left out) and checks every referenced file is present — for drag-and-drop hosts such as Cloudflare Pages or Netlify.

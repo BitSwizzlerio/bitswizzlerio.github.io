@@ -1,0 +1,86 @@
+{
+  "format": "foley-bank",
+  "version": 1,
+  "bankName": "Arrow Flyby",
+  "source": "Combat/Arrow Flyby",
+  "pads": [
+    {
+      "id": "pmtewnihp57",
+      "name": "Arrow Flyby",
+      "icon": "🏹",
+      "color": "#6fcf6f",
+      "key": "",
+      "layers": [
+        {
+          "id": "pmtewnihp59",
+          "gain": 0,
+          "pan": 0,
+          "offset": 0,
+          "mute": false,
+          "solo": false,
+          "open": true,
+          "repeat": 1,
+          "every": 0.25,
+          "jitter": 0.2,
+          "hp": 20,
+          "lp": 20000,
+          "drive": 0,
+          "gen": "bow",
+          "params": {
+            "type": "arrow-flyby",
+            "tension": 0.6,
+            "length": 0.4
+          }
+        }
+      ],
+      "fx": {
+        "pitch": 0,
+        "hp": 20,
+        "lp": 20000,
+        "drive": 0,
+        "driveType": "soft",
+        "bits": 16,
+        "downsample": 1,
+        "body": "none",
+        "bodyAmount": 0.6,
+        "bodySize": 1,
+        "bodyDamp": 0.3,
+        "space": 0,
+        "spaceSize": 0.3,
+        "distance": 0,
+        "transAttack": 0,
+        "transSustain": 0,
+        "rattle": 0,
+        "rattleHz": 2200,
+        "rattleThreshold": 0.35,
+        "reverb": 0,
+        "reverbType": "hall",
+        "reverbSize": 0.5,
+        "reverbDamp": 0.5,
+        "delay": 0,
+        "delayTime": 0.18,
+        "delayFeedback": 0.35,
+        "reverse": false,
+        "normalize": true,
+        "normMode": "loudness",
+        "loudTarget": -18,
+        "fadeOut": 0.005,
+        "gain": 0,
+        "loopFade": 0
+      },
+      "seed": 965559,
+      "variations": 4,
+      "roundRobin": false,
+      "loop": false,
+      "intensity": 0.5,
+      "humanize": {
+        "pitch": 0.5,
+        "gain": 1.5,
+        "pan": 0
+      },
+      "pan": 0,
+      "tags": "",
+      "macros": []
+    }
+  ]
+}

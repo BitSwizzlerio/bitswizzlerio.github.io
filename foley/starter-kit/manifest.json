@@ -1,0 +1,21 @@
+{
+  "name": "Starter Kit",
+  "_comment": "Order of pads in the kit (file names in starter-kit/pads, .json optional). Files not listed are appended alphabetically. Rebuild with: node archive/dev/tools/build-starter.js",
+  "order": [
+    "step-gravel", "step-wood", "jump", "land", "sword-clash", "punch", "explosion", "pistol", "laser-pew", "arrow-flyby",
+    "coin", "power-up", "magic-sparkle", "glass-shatter", "heartbeat",
+    "ui-click", "ui-confirm", "ui-error", "hover", "click-soft", "click-crisp", "click-mech", "bubble", "confirm", "cancel", "error", "notify", "popup", "swipe", "swipe-back", "typing", "typewriter", "lock", "switch", "level-up", "heal",
+    "8-bit-jump", "8-bit-coin", "8-bit-1-up", "8-bit-laser", "8-bit-explode", "8-bit-hit", "8-bit-blip", "8-bit-error", "8-bit-power-up", "8-bit-alarm", "8-bit-engine", "8-bit-text",
+    "chain-hoist", "chain-lower", "drawbridge-lower", "drawbridge-raise", "door-slam", "door-creak",
+    "spider-on-wood", "insectswarm", "bird", "owl",
+    "goblinchuckle", "sneeze", "snore",
+    "stonescrape",
+    "rain-loop", "rain", "wind", "fire-loop", "thunder", "splash",
+    "radio-static", "tv-static", "geiger",
+    "glitch", "shimmer",
+    "bell-jiggle",
+    "bone-rattle", "skeleton-walk", "ghoul-groan", "death-rattle",
+    "crate-smash", "coin-pouch", "treasure-spill", "armor-walk",
+    "potion-glug", "bite-crunch", "war-horn"
+  ]
+}

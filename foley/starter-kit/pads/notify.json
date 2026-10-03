@@ -1,0 +1,91 @@
+{
+  "format": "foley-bank",
+  "version": 1,
+  "bankName": "Notify",
+  "source": "UI & Menus/Notify",
+  "pads": [
+    {
+      "id": "pmtewnih72h",
+      "name": "Notify",
+      "icon": "🔔",
+      "color": "#d9d25a",
+      "key": "",
+      "layers": [
+        {
+          "id": "pmtewnih72j",
+          "gain": 0,
+          "pan": 0,
+          "offset": 0,
+          "mute": false,
+          "solo": false,
+          "open": true,
+          "repeat": 1,
+          "every": 0.25,
+          "jitter": 0.2,
+          "hp": 20,
+          "lp": 20000,
+          "drive": 0,
+          "gen": "uitone",
+          "params": {
+            "type": "notify",
+            "wave": "sine",
+            "root": 660,
+            "notes": 3,
+            "speed": 0.07,
+            "decay": 0.4,
+            "bright": 0.7,
+            "scale": "major"
+          }
+        }
+      ],
+      "fx": {
+        "pitch": 0,
+        "hp": 20,
+        "lp": 20000,
+        "drive": 0,
+        "driveType": "soft",
+        "bits": 16,
+        "downsample": 1,
+        "body": "none",
+        "bodyAmount": 0.6,
+        "bodySize": 1,
+        "bodyDamp": 0.3,
+        "space": 0,
+        "spaceSize": 0.3,
+        "distance": 0,
+        "transAttack": 0,
+        "transSustain": 0,
+        "rattle": 0,
+        "rattleHz": 2200,
+        "rattleThreshold": 0.35,
+        "reverb": 0.15,
+        "reverbType": "hall",
+        "reverbSize": 0.5,
+        "reverbDamp": 0.5,
+        "delay": 0,
+        "delayTime": 0.18,
+        "delayFeedback": 0.35,
+        "reverse": false,
+        "normalize": true,
+        "normMode": "loudness",
+        "loudTarget": -18,
+        "fadeOut": 0.005,
+        "gain": 0,
+        "loopFade": 0
+      },
+      "seed": 89027,
+      "variations": 1,
+      "roundRobin": false,
+      "loop": false,
+      "intensity": 0.5,
+      "humanize": {
+        "pitch": 0.5,
+        "gain": 1.5,
+        "pan": 0
+      },
+      "pan": 0,
+      "tags": "",
+      "macros": []
+    }
+  ]
+}

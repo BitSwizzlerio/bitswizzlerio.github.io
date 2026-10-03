@@ -1,0 +1,88 @@
+{
+  "format": "foley-bank",
+  "version": 1,
+  "bankName": "Bone Rattle",
+  "pads": [
+    {
+      "id": "pmu7hxi2k1",
+      "name": "Bone Rattle",
+      "icon": "🦴",
+      "color": "#cfc9b0",
+      "key": "",
+      "layers": [
+        {
+          "id": "pmu7hxi2k2",
+          "gain": 0,
+          "pan": 0,
+          "offset": 0,
+          "mute": false,
+          "solo": false,
+          "open": true,
+          "repeat": 1,
+          "every": 0.25,
+          "jitter": 0.2,
+          "hp": 20,
+          "lp": 20000,
+          "drive": 0,
+          "gen": "bones",
+          "params": {
+            "type": "rattle",
+            "size": 0.5,
+            "length": 1.3,
+            "count": 0.55,
+            "dry": 0.7,
+            "tempo": 100
+          }
+        }
+      ],
+      "fx": {
+        "pitch": 0,
+        "hp": 20,
+        "lp": 20000,
+        "drive": 0,
+        "driveType": "soft",
+        "bits": 16,
+        "downsample": 1,
+        "body": "none",
+        "bodyAmount": 0.6,
+        "bodySize": 1,
+        "bodyDamp": 0.3,
+        "space": 0.15,
+        "spaceSize": 0.4,
+        "distance": 0,
+        "transAttack": 0,
+        "transSustain": 0,
+        "rattle": 0,
+        "rattleHz": 2200,
+        "rattleThreshold": 0.35,
+        "reverb": 0,
+        "reverbType": "hall",
+        "reverbSize": 0.5,
+        "reverbDamp": 0.5,
+        "delay": 0,
+        "delayTime": 0.18,
+        "delayFeedback": 0.35,
+        "reverse": false,
+        "normalize": true,
+        "normMode": "loudness",
+        "loudTarget": -18,
+        "fadeOut": 0.005,
+        "gain": 0,
+        "loopFade": 0
+      },
+      "seed": 168304,
+      "variations": 6,
+      "roundRobin": false,
+      "loop": false,
+      "intensity": 0.5,
+      "humanize": {
+        "pitch": 0.25,
+        "gain": 1,
+        "pan": 0.3
+      },
+      "pan": 0,
+      "tags": "",
+      "macros": []
+    }
+  ]
+}

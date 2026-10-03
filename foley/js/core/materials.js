@@ -57,8 +57,15 @@ window.Foley = window.Foley || {};
     body:      { f1: 60,  t1: 0.09, slope: 1.3, aspect: 1.3, inh: 0.12, knock: 1.2, knockF: 45,  grain: 0.05, nModes: 8,  density: 0.4, fmax: 900,  skin: 0.5, skinHz: 1000 }, // torso / body fall
   };
 
+  /* Bone: hard dense organic — hardwood crossed with ceramic; the long bones are hollow tubes, so a clack has a woody
+     knock, a faint cavity "tok" and a short dry decay. */
+  const BONE = {
+    bone:  { f1: 620, t1: 0.11, slope: 0.75, aspect: 2.3, inh: 0.06, knock: 0.35, knockF: 180, grain: 0.25, nModes: 10, density: 0.4, fmax: 6500, cavity: 0.35 },
+    skull: { f1: 360, t1: 0.13, slope: 0.8,  aspect: 1.4, inh: 0.07, knock: 0.6,  knockF: 120, grain: 0.2,  nModes: 10, density: 0.5, fmax: 5000, cavity: 0.6 },
+  };
+
   const M = Foley.Materials = {
-    WOOD, MASONRY, METAL, GLASS, SOFT,
+    WOOD, MASONRY, METAL, GLASS, SOFT, BONE,
     /* Generic mode-table generator shared by all materials. */
     genModes(w, size, rng, pos) {
       size = size || 1; pos = pos === undefined ? 0.3 : pos;
@@ -84,7 +91,7 @@ window.Foley = window.Foley || {};
     masonryTable(kind, size) { const rng = new Foley.PRNG(0x5AB1E + kind.length * 31); return M.masonryModes(kind, size || 1, rng, 0.3).map(m => [Math.round(m.f), +m.decay.toFixed(3), +m.gain.toFixed(3)]); },
     metalModes(kind, size, rng, pos) { return M.genModes(METAL[kind] || METAL.plate, size, rng, pos); },
     glassModes(kind, size, rng, pos) { return M.genModes(GLASS[kind] || GLASS.pane, size, rng, pos); },
-    table(family, kind, size) { const spec = ({ wood: WOOD, masonry: MASONRY, metal: METAL, glass: GLASS })[family][kind]; const rng = new Foley.PRNG(0xC0FFEE + family.length * 7 + kind.length * 31); return M.genModes(spec, size || 1, rng, 0.3).map(m => [Math.round(m.f), +m.decay.toFixed(3), +m.gain.toFixed(3)]); },
+    table(family, kind, size) { const spec = ({ wood: WOOD, masonry: MASONRY, metal: METAL, glass: GLASS, soft: SOFT, bone: BONE })[family][kind]; const rng = new Foley.PRNG(0xC0FFEE + family.length * 7 + kind.length * 31); return M.genModes(spec, size || 1, rng, 0.3).map(m => [Math.round(m.f), +m.decay.toFixed(3), +m.gain.toFixed(3)]); },
 
     /* Generic strike through any spec (used for metal/glass/ceramic/plastic). o: { size, force, hardness, amp, pos, double, damp, shared, bend }
        'bend': modes glide down from f*(1+bend*force) to f over ~25 ms on hard hits (sheet-metal / thin-plate nonlinearity). */
@@ -118,7 +125,7 @@ window.Foley = window.Foley || {};
     },
     glassHit(ctx, out, rng, t, o) { return M.strike(ctx, out, rng, t, GLASS[(o && o.kind) || 'pane'], o); },
     banks(ctx, out, rng, family, kind, size, n) {
-      const spec = ({ wood: WOOD, masonry: MASONRY, metal: METAL, glass: GLASS })[family][kind]; const sets = [];
+      const spec = ({ wood: WOOD, masonry: MASONRY, metal: METAL, glass: GLASS, soft: SOFT, bone: BONE })[family][kind]; const sets = [];
       for (let i = 0; i < (n || 3); i++) { const b = M.bank(ctx, M.genModes(spec, size * (0.85 + i * 0.15), rng, rng.range(0.15, 0.45)), 1, 0); b.output.connect(out); sets.push(b); }
       return sets;
     },

@@ -9,6 +9,9 @@ window.Foley = window.Foley || {};
     cache: new Map(), // key -> Promise<AudioBuffer>
 
     ensure() {
+      // iOS mutes Web Audio while the ringer switch is on silent unless the page declares itself a playback app
+      // (Audio Session API, Safari 16.4+). Elsewhere the property doesn't exist and this is a no-op.
+      if (navigator.audioSession && navigator.audioSession.type !== 'playback') { try { navigator.audioSession.type = 'playback'; } catch (e) { } }
       if (!Engine.ctx) {
         Engine.ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
         Engine.master = Engine.ctx.createGain(); Engine.master.gain.value = Engine.masterVolume;

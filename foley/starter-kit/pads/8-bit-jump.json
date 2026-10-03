@@ -1,0 +1,89 @@
+{
+  "format": "foley-bank",
+  "version": 1,
+  "bankName": "8-bit Jump",
+  "source": "Retro 8-bit/Jump",
+  "pads": [
+    {
+      "id": "pmtewnihc3c",
+      "name": "8-bit Jump",
+      "icon": "🦘",
+      "color": "#6fcf6f",
+      "key": "",
+      "layers": [
+        {
+          "id": "pmtewnihc3e",
+          "gain": 0,
+          "pan": 0,
+          "offset": 0,
+          "mute": false,
+          "solo": false,
+          "open": true,
+          "repeat": 1,
+          "every": 0.25,
+          "jitter": 0.2,
+          "hp": 20,
+          "lp": 20000,
+          "drive": 0,
+          "gen": "jump",
+          "params": {
+            "start": 150,
+            "end": 900,
+            "length": 0.15,
+            "wave": "square",
+            "wobble": 0,
+            "breath": 0
+          }
+        }
+      ],
+      "fx": {
+        "pitch": 0,
+        "hp": 20,
+        "lp": 20000,
+        "drive": 0,
+        "driveType": "soft",
+        "bits": 6,
+        "downsample": 4,
+        "body": "none",
+        "bodyAmount": 0.6,
+        "bodySize": 1,
+        "bodyDamp": 0.3,
+        "space": 0,
+        "spaceSize": 0.3,
+        "distance": 0,
+        "transAttack": 0,
+        "transSustain": 0,
+        "rattle": 0,
+        "rattleHz": 2200,
+        "rattleThreshold": 0.35,
+        "reverb": 0,
+        "reverbType": "hall",
+        "reverbSize": 0.5,
+        "reverbDamp": 0.5,
+        "delay": 0,
+        "delayTime": 0.18,
+        "delayFeedback": 0.35,
+        "reverse": false,
+        "normalize": true,
+        "normMode": "peak",
+        "loudTarget": -18,
+        "fadeOut": 0.005,
+        "gain": 0,
+        "loopFade": 0
+      },
+      "seed": 705092,
+      "variations": 1,
+      "roundRobin": false,
+      "loop": false,
+      "intensity": 0.5,
+      "humanize": {
+        "pitch": 0.5,
+        "gain": 1.5,
+        "pan": 0
+      },
+      "pan": 0,
+      "tags": "",
+      "macros": []
+    }
+  ]
+}

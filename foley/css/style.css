@@ -156,4 +156,55 @@ button.mini.solo { background: #d9d25a; color: #222; border-color: #d9d25a; }
 .ctx div.danger { color: var(--danger); }
 .toast { position: fixed; bottom: 18px; left: 50%; transform: translate(-50%, 20px); background: var(--bg3); border: 1px solid var(--line); padding: 8px 14px; border-radius: 8px; opacity: 0; transition: .25s; z-index: 70; }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
-@media (max-width: 900px) { .main { flex-direction: column; } .inspector { width: auto; height: 50%; border-left: 0; border-top: 1px solid var(--line); } }
+/* BitSwizzler.io back-link, first item in the top bar */
+.site-home { display: inline-flex; align-items: center; gap: 6px; padding-right: 12px; border-right: 1px solid var(--line); color: #FFD400; text-decoration: none; font-weight: 700; font-size: 13px; letter-spacing: .04em; white-space: nowrap; opacity: .9; }
+.site-home b { color: #fff; font-weight: 700; }
+.site-home:hover { opacity: 1; text-shadow: 0 0 10px rgba(255,212,0,.5); }
+.site-home-arrow { font-size: 9px; opacity: .7; }
+
+.m-only, .hint-touch { display: none; }
+
+/* ---- touchscreens: no hover, fat fingers, iOS focus-zoom ---- */
+@media (hover: none) and (pointer: coarse) {
+  .hint-desktop { display: none; }
+  .hint-touch { display: inline; }
+  .pad-menu { opacity: .75; padding: 2px 8px; }
+  .pad-x { display: none; }                         /* invisible-but-tappable delete in every pad's corner; Delete lives in the long-press menu */
+  input, select, textarea { font-size: 16px; }     /* under 16px, iOS zooms the page when a field is focused */
+  button { min-height: 36px; }
+  input[type=range] { height: 28px; }
+}
+
+/* ---- phones and small tablets: compact chrome ---- */
+@media (max-width: 900px), (max-height: 500px) {
+  html, body { height: 100%; height: 100dvh; }     /* dvh follows the mobile address bar as it shows and hides */
+  .topbar { flex-wrap: wrap; gap: 8px; padding: 6px 10px; }
+  .topbar .brand .sub, .topbar .bank-name, .topbar .dirty, .topbar .toolbar, .topbar .master { display: none; }
+  .topbar .m-only { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; }
+  .topbar.open .bank-name { display: block; order: 10; flex: 1 1 100%; width: auto; }
+  .topbar.open .toolbar { display: flex; order: 11; flex: 1 1 100%; }
+  .topbar.open .master { display: flex; order: 12; flex: 1 1 100%; }
+  .topbar.open .master input { width: auto; flex: 1; }
+  .board-tools { gap: 8px; padding: 6px 10px; flex-wrap: wrap; }
+  .board-tools input { width: auto; flex: 1 1 140px; min-width: 0; }
+  .board-tools .hint { flex: 1 1 160px; font-size: 10.5px; line-height: 1.3; }
+  .inspector .row { flex-wrap: wrap; }              /* transport/export button rows wrap instead of clipping */
+  .board { padding: 10px; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+  .pad { height: 96px; }
+  .pad-icon { font-size: 24px; margin-bottom: 4px; }
+  .inspector { padding: 8px 10px 24px; }
+  .row label { width: 82px; }
+  .modal-box { width: 96vw; max-height: 90dvh; }
+}
+/* tall enough to stack: board over inspector */
+@media (max-width: 900px) and (min-height: 501px) {
+  .main { flex-direction: column; }
+  .board-wrap { flex: 1 1 55%; min-height: 0; }
+  .inspector { width: auto; flex: 1 1 45%; min-height: 0; border-left: 0; border-top: 1px solid var(--line); }
+}
+/* phone held sideways: too short to stack, so the inspector sits beside the board */
+@media (max-height: 500px) {
+  .board-wrap { flex: 1 1 58%; min-width: 0; }
+  .inspector { width: auto; flex: 0 0 42%; }
+  .board-tools .hint { display: none; }
+}

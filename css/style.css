@@ -241,6 +241,7 @@ h1, h2, h3 { font-family: var(--font-head); font-weight: 400; letter-spacing: .0
 }
 .video-frame:hover .sound-toggle { opacity: 1; }
 .sound-toggle.on { background: var(--yellow); color: #111; opacity: 1; }
+@media (hover: none) { .sound-toggle { opacity: .85; } }   /* no hover on touch screens: always show it */
 
 /* 3D model frame (<model-viewer>) */
 .model-frame {

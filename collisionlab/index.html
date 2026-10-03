@@ -31,7 +31,11 @@
     .stage { display: grid; place-items: center; padding: 1.25rem; }
     .frame { position: relative; width: min(1280px, 100%); aspect-ratio: 1280 / 780; background: #000; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(255,212,0,.08); }
     /* the canvas must have no border/padding (mouse coords); CSS scaling of the whole canvas is fine */
-    #canvas { display: block; width: 100%; height: 100%; visibility: hidden; outline: none; }
+    /* The game renders at this box's size (resizable LÖVE window) and lays itself out for it.
+       touch-action:none hands every touch to the game instead of scrolling or zooming the page. */
+    #canvas { display: block; width: 100%; height: 100%; visibility: hidden; outline: none;
+      touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+    .bar .ico { display: none; font-size: 1rem; line-height: 1; }
     .frame:fullscreen, .frame:-webkit-full-screen { display: grid; place-items: center; background: #000; border: 0; border-radius: 0; box-shadow: none; }
     .loading { position: absolute; inset: 0; display: grid; place-items: center; align-content: center; gap: 1rem; color: var(--muted); font-size: .9rem; background: radial-gradient(circle at 50% 40%, #2b2b33, #141417 70%); }
     .loading .ring { width: 48px; height: 48px; border-radius: 50%; border: 3px solid rgba(255,212,0,.2); border-top-color: var(--yellow); animation: spin 1s linear infinite; }
@@ -44,6 +48,22 @@
     footer a { color: var(--muted); }
     footer a:hover { color: var(--yellow); }
     @media (max-width: 800px) { .title em, .keys { display: none; } .bar { gap: .6rem; } }
+    /* Phones, small tablets, short landscape screens: the game fills the screen under a slim bar,
+       and the canvas follows it on rotation. */
+    @media (max-width: 900px), (max-height: 600px) {
+      html, body { overscroll-behavior: none; }
+      .bar { height: 46px; padding: 0 .75rem; gap: .5rem; }
+      .home small, .title em, .keys, footer { display: none; }
+      .home, .title { font-size: 1.15rem; }
+      .title { padding-left: .6rem; }
+      .bar .lbl { display: none; }
+      .bar .ico { display: inline; }
+      .bar button { width: 40px; height: 34px; padding: 0; }
+      .stage { padding: 0; }
+      .frame { width: 100%; aspect-ratio: auto; height: calc(100vh - 46px); height: calc(100dvh - 46px);
+        border: 0; border-radius: 0; box-shadow: none; }
+    }
+    @media (max-width: 360px) { .title { display: none; } }
   </style>
 </head>
 <body>
@@ -51,8 +71,8 @@
     <a class="home" href="../" title="Back to BitSwizzler.io"><small>&#9664; LAB</small>Bit<span>Swizzler</span>.io</a>
     <div class="title">CollisionLab <em>SAT &middot; GJK &middot; MPR &middot; broadphase</em></div>
     <div class="spacer"></div>
-    <button type="button" onclick="goFullScreen()" title="Fullscreen (F11)">Fullscreen</button>
-    <button type="button" onclick="location.reload()" title="Restart (also use this after pressing Esc, which quits the app)">Restart</button>
+    <button type="button" id="fsBtn" onclick="goFullScreen()" title="Fullscreen (F11)" aria-label="Fullscreen"><span class="ico" aria-hidden="true">&#x2922;</span><span class="lbl">Fullscreen</span></button>
+    <button type="button" onclick="location.reload()" title="Restart (also use this after pressing Esc, which quits the app)" aria-label="Restart"><span class="ico" aria-hidden="true">&#x21bb;</span><span class="lbl">Restart</span></button>
   </div>
 
   <div class="stage">
@@ -93,8 +113,14 @@
     window.onclick = function () { window.focus(); };
 
     var loadingEl = document.getElementById('loading'), statusEl = document.getElementById('status'), pctEl = document.getElementById('pct');
+    // Touch screens get the in-game toolbar from the first frame (any touch also switches it on).
+    var coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    // iPhone Safari can't fullscreen a canvas; don't offer a button that does nothing.
+    if (!(document.fullscreenEnabled || document.webkitFullscreenEnabled)) {
+      document.getElementById('fsBtn').style.display = 'none';
+    }
     var Module = {
-      arguments: ['./game.love'],
+      arguments: coarse ? ['./game.love', '--touch'] : ['./game.love'],
       INITIAL_MEMORY: 16777216,
       printErr: console.error.bind(console),
       canvas: (function () {

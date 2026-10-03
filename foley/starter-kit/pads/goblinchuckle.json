@@ -1,0 +1,83 @@
+{
+  "format": "foley-bank",
+  "version": 1,
+  "bankName": "Goblin Chuckle",
+  "pads": [
+    {
+      "id": "pmteus6uset",
+      "name": "Goblin Chuckle",
+      "icon": "👺",
+      "color": "#6fcf6f",
+      "key": "",
+      "layers": [
+        {
+          "id": "pmteus6usev",
+          "gain": 0,
+          "pan": 0,
+          "offset": 0,
+          "mute": false,
+          "open": true,
+          "gen": "laugh",
+          "params": {
+            "type": "goblin-chuckle",
+            "syllables": 5,
+            "rate": 5,
+            "pitch": 1,
+            "rough": 0.5,
+            "breath": 0.4,
+            "size": 0.75,
+            "irregular": 0.3,
+            "inhale": 0
+          }
+        }
+      ],
+      "fx": {
+        "pitch": 0,
+        "hp": 20,
+        "lp": 20000,
+        "drive": 0,
+        "driveType": "soft",
+        "bits": 16,
+        "downsample": 1,
+        "body": "none",
+        "bodyAmount": 0.4,
+        "bodySize": 0.6,
+        "bodyDamp": 0.3,
+        "space": 0,
+        "spaceSize": 0.3,
+        "distance": 0,
+        "transAttack": 0,
+        "transSustain": 0,
+        "rattle": 0,
+        "rattleHz": 2200,
+        "rattleThreshold": 0.35,
+        "reverb": 0.12,
+        "reverbType": "hall",
+        "reverbSize": 0.5,
+        "reverbDamp": 0.5,
+        "delay": 0,
+        "delayTime": 0.18,
+        "delayFeedback": 0.35,
+        "reverse": false,
+        "normalize": true,
+        "normMode": "loudness",
+        "loudTarget": -18,
+        "fadeOut": 0.005,
+        "gain": 0,
+        "loopFade": 0
+      },
+      "seed": 674400,
+      "variations": 8,
+      "roundRobin": false,
+      "loop": false,
+      "intensity": 0.5,
+      "humanize": {
+        "pitch": 0.5,
+        "gain": 1.5,
+        "pan": 0
+      },
+      "pan": 0,
+      "tags": ""
+    }
+  ]
+}

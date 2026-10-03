@@ -4,8 +4,8 @@
 # If you deploy from a git repo instead, you do not need this: .gitignore already
 # keeps the masters out, so the host builds from the right set automatically.
 #
-# Left out: asset masters (full-res sculpts, *_full.mp4, hero PNGs, Escher.jpg),
-# tools\, README.md, serve.bat, .gitignore, dist\ itself.
+# Left out: asset masters (full-res sculpts, *_full.mp4, hero PNGs, Escher.jpg), lab sources
+# (collisionlab\src, foley\archive and starter-kit), tools\, README.md, serve.bat, dist\ itself.
 #
 # Usage:  powershell -ExecutionPolicy Bypass -File tools\build-deploy.ps1
 
@@ -39,10 +39,16 @@ $dropPatterns = @(
   'assets\models\TheEvidence.glb', 'assets\models\robot.glb',
   'assets\videos\*_full.mp4',
   'assets\images\*.png',
-  'assets\drawings\Escher.jpg'
+  'assets\drawings\Escher.jpg',
+  'foley\README.md'
 )
 foreach ($pat in $dropPatterns) {
   Get-ChildItem (Join-Path $Dist $pat) -ErrorAction SilentlyContinue | Remove-Item -Force
+}
+# Lab sources and dev tooling live in the repo but are not part of the live site
+foreach ($dir in 'collisionlab\src', 'foley\archive', 'foley\starter-kit') {
+  $p = Join-Path $Dist $dir
+  if (Test-Path $p) { Remove-Item $p -Recurse -Force }
 }
 
 # Report, and warn about anything a static host would choke on
@@ -61,12 +67,12 @@ $missing = @()
 foreach ($page in 'index.html', 'showcase.html') {
   $html = Get-Content (Join-Path $Dist $page) -Raw
   foreach ($m in [regex]::Matches($html, '(?:src|href)="((?!https?:|//|#|mailto:)[^"]+)"')) {
-    $rel = ($m.Groups[1].Value -split '#')[0] -replace '/', '\'
+    $rel = ($m.Groups[1].Value -split '[#?]')[0] -replace '/', '\'
     if ($rel -like '*\') { continue }
     if (-not (Test-Path (Join-Path $Dist $rel))) { $missing += "$page -> $rel" }
   }
   foreach ($m in [regex]::Matches($html, "url\('([^']+)'\)")) {
-    $rel = ($m.Groups[1].Value -split '#')[0] -replace '/', '\'
+    $rel = ($m.Groups[1].Value -split '[#?]')[0] -replace '/', '\'
     if (-not (Test-Path (Join-Path $Dist $rel))) { $missing += "$page -> $rel" }
   }
 }

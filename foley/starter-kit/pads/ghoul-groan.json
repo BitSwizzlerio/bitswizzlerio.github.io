@@ -1,0 +1,89 @@
+{
+  "format": "foley-bank",
+  "version": 1,
+  "bankName": "Ghoul Groan",
+  "pads": [
+    {
+      "id": "pmu7hxi2nb",
+      "name": "Ghoul Groan",
+      "icon": "🧟",
+      "color": "#86a06a",
+      "key": "",
+      "layers": [
+        {
+          "id": "pmu7hxi2nc",
+          "gain": 0,
+          "pan": 0,
+          "offset": 0,
+          "mute": false,
+          "solo": false,
+          "open": true,
+          "repeat": 1,
+          "every": 0.25,
+          "jitter": 0.2,
+          "hp": 20,
+          "lp": 20000,
+          "drive": 0,
+          "gen": "ghoul",
+          "params": {
+            "type": "groan",
+            "length": 2.2,
+            "pitch": 0.95,
+            "size": 1.6,
+            "rasp": 0.65,
+            "crack": 0.7,
+            "breath": 0.5
+          }
+        }
+      ],
+      "fx": {
+        "pitch": 0,
+        "hp": 20,
+        "lp": 20000,
+        "drive": 0,
+        "driveType": "soft",
+        "bits": 16,
+        "downsample": 1,
+        "body": "pipe",
+        "bodyAmount": 0.3,
+        "bodySize": 1.6,
+        "bodyDamp": 0.5,
+        "space": 0,
+        "spaceSize": 0.3,
+        "distance": 0,
+        "transAttack": 0,
+        "transSustain": 0,
+        "rattle": 0,
+        "rattleHz": 2200,
+        "rattleThreshold": 0.35,
+        "reverb": 0.28,
+        "reverbType": "cave",
+        "reverbSize": 0.55,
+        "reverbDamp": 0.55,
+        "delay": 0,
+        "delayTime": 0.18,
+        "delayFeedback": 0.35,
+        "reverse": false,
+        "normalize": true,
+        "normMode": "loudness",
+        "loudTarget": -19,
+        "fadeOut": 0.005,
+        "gain": 0,
+        "loopFade": 0
+      },
+      "seed": 591679,
+      "variations": 5,
+      "roundRobin": false,
+      "loop": false,
+      "intensity": 0.5,
+      "humanize": {
+        "pitch": 0.5,
+        "gain": 1,
+        "pan": 0
+      },
+      "pan": 0,
+      "tags": "",
+      "macros": []
+    }
+  ]
+}
